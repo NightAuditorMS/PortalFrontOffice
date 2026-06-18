@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Restaurante O Mar",
+    "category": "Restaurante",
+    "description": "Especialidade em marisco e peixe fresco. Excelente vista."
+  },
+  {
+    "name": "Farmácia Central",
+    "category": "Farmácia",
+    "description": "Aberta 24 horas. Localizada na praça principal."
+  },
+  {
+    "name": "Castelo de São Jorge",
+    "category": "Turismo",
+    "description": "Monumento histórico com vista panorâmica sobre a cidade."
+  },
+  {
+    "name": "Pizzaria Bella Napoli",
+    "category": "Restaurante",
+    "description": "Autêntica pizza italiana em forno de lenha."
+  }
+]

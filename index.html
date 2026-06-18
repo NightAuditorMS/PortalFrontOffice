@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Front Office</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="dashboard">
+    <header class="dashboard-header">
+      <div class="brand">
+        <!-- Placeholder para o Logo -->
+        <h1>Portal Front Office</h1>
+      </div>
+      <div class="user-info">Rececionista</div>
+    </header>
+
+    <aside class="dashboard-sidebar">
+      <nav>
+        <ul>
+          <li><a href="#" class="active">Dashboard</a></li>
+          <li><a href="#">Notícias</a></li>
+          <li><a href="#">Eventos</a></li>
+          <li><a href="#">Links Úteis</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <section class="dashboard-grid">
+        
+        <div class="card" id="noticias-section">
+          <h2>Notícias</h2>
+          <div id="noticias-container" class="content-container">
+            <!-- Carregado via JS -->
+            <p class="loading">A carregar notícias...</p>
+          </div>
+        </div>
+
+        <div class="card" id="eventos-section">
+          <h2>Eventos</h2>
+          <div id="eventos-container" class="content-container">
+            <p class="muted">Sem eventos agendados.</p>
+          </div>
+        </div>
+
+        <div class="card" id="guias-section">
+          <h2>Concierge Virtual</h2>
+          <input type="text" id="search-guias" placeholder="Pesquisar restaurantes, locais..." style="width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box;">
+          <div id="guias-container" class="content-container">
+            <p class="loading">A carregar guias...</p>
+          </div>
+        </div>
+
+        <div class="card" id="links-section">
+          <h2>Links Úteis</h2>
+          <div id="links-container" class="content-container">
+            <ul class="link-list">
+              <li><a href="#">Checklist App</a></li>
+              <li><a href="#">Sistema MySana</a></li>
+              <li><a href="#">Intranet Corporativa</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/portal.js"></script>
+</body>
+</html>
