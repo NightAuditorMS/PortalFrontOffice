@@ -1,5 +1,10 @@
 [
   {
+    "title": "Título da Notícia",
+    "date": "Data",
+    "content": "Conteúdo da Notícia"
+  },
+  {
     "title": "Atualização do Sistema MySana",
     "date": "18 de Junho de 2026",
     "content": "A atualização para a versão 3.4 do MySana será realizada nesta madrugada. Haverá um downtime previsto de 15 minutos entre as 03:00 e as 03:15."
