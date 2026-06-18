@@ -1,0 +1,33 @@
+name: Atualizador de Noticias
+
+on:
+  repository_dispatch:
+    types: [nova_noticia]
+
+jobs:
+  atualizar-ficheiro:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Injetar a Nova Notícia
+        env:
+          TITLE: ${{ github.event.client_payload.titulo }}
+          DATE: ${{ github.event.client_payload.data }}
+          CONTENT: ${{ github.event.client_payload.conteudo }}
+        run: |
+          jq --arg title "$TITLE" \
+             --arg date "$DATE" \
+             --arg content "$CONTENT" \
+             '. = [{"title": $title, "date": $date, "content": $content}] + .' data/noticias.json > tmp.json && mv tmp.json data/noticias.json
+
+      - name: Guardar e Publicar
+        run: |
+          git config --global user.name "Robô do Front Office"
+          git config --global user.email "robo@hotel.com"
+          git add data/noticias.json
+          git commit -m "Nova notícia adicionada automaticamente"
+          git push
