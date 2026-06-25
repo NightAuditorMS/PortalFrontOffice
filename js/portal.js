@@ -164,33 +164,90 @@ const GreetingService = {
 };
 
 const WeatherService = {
-  getForecast() {
-    const now = new Date();
-    const hour = now.getHours();
-    const seed = now.getDate() + now.getMonth() + hour;
-    const forecasts = [
-      { description: 'Ensolarado', min: 19, max: 28 },
-      { description: 'Parcialmente nublado', min: 17, max: 25 },
-      { description: 'Nublado', min: 15, max: 23 },
-      { description: 'Chuva leve', min: 14, max: 21 },
-      { description: 'Chuviscos', min: 13, max: 20 },
-      { description: 'Ventoso', min: 16, max: 24 },
-      { description: 'Aberturas de sol', min: 18, max: 26 }
-    ];
-
-    const item = forecasts[seed % forecasts.length];
-    const min = item.min + (hour >= 18 || hour < 6 ? -1 : 0);
-    const max = item.max + (hour >= 18 || hour < 6 ? -1 : 0);
-
-    return {
-      description: item.description,
-      min: Utils.clamp(min, 8, 30),
-      max: Utils.clamp(max, 12, 34)
-    };
+  defaultLocation: {
+    latitude: 38.7167,
+    longitude: -9.1333
   },
 
-  getForecastText() {
-    const forecast = this.getForecast();
+  weatherCodeMap(code) {
+    const map = {
+      0: 'Ensolarado',
+      1: 'Pouco nublado',
+      2: 'Parcialmente nublado',
+      3: 'Nublado',
+      45: 'Neblina',
+      48: 'Neblina seca',
+      51: 'Chuvisco leve',
+      53: 'Chuvisco moderado',
+      55: 'Chuvisco denso',
+      56: 'Garoa congelante leve',
+      57: 'Garoa congelante densa',
+      61: 'Chuva fraca',
+      63: 'Chuva moderada',
+      65: 'Chuva forte',
+      66: 'Chuva congelante leve',
+      67: 'Chuva congelante forte',
+      71: 'Neve fraca',
+      73: 'Neve moderada',
+      75: 'Neve forte',
+      77: 'Granizo',
+      80: 'Chuva de pancada',
+      81: 'Chuva intensa de pancada',
+      82: 'Chuva muito intensa de pancada',
+      85: 'Neve de pancada',
+      86: 'Neve intensa de pancada',
+      95: 'Tempestade',
+      96: 'Tempestade com granizo',
+      99: 'Tempestade severa'
+    };
+    return map[code] || 'Tempo indefinido';
+  },
+
+  async getLocation() {
+    if (!navigator.geolocation) {
+      return this.defaultLocation;
+    }
+
+    return new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+        },
+        () => {
+          resolve(this.defaultLocation);
+        },
+        { timeout: 5000 }
+      );
+    });
+  },
+
+  async fetchForecast() {
+    const location = await this.getLocation();
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`;
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Weather API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const daily = data.daily;
+    if (!daily || !daily.weathercode || daily.weathercode.length === 0) {
+      throw new Error('Weather data unavailable');
+    }
+
+    const index = 0;
+    const description = this.weatherCodeMap(daily.weathercode[index]);
+    const min = Math.round(daily.temperature_2m_min[index]);
+    const max = Math.round(daily.temperature_2m_max[index]);
+
+    return { description, min, max };
+  },
+
+  formatForecast(forecast) {
     return `${forecast.description} · min ${forecast.min}° · max ${forecast.max}°`;
   }
 };
@@ -227,7 +284,7 @@ const ThemeController = {
 };
 
 const HeaderController = {
-  init() {
+  async init() {
     const greetingText = document.getElementById('greeting-text');
     const weatherSummary = document.getElementById('weather-summary');
 
@@ -236,7 +293,14 @@ const HeaderController = {
     }
 
     if (weatherSummary) {
-      weatherSummary.textContent = WeatherService.getForecastText();
+      weatherSummary.textContent = 'A carregar previsão...';
+      try {
+        const forecast = await WeatherService.fetchForecast();
+        weatherSummary.textContent = WeatherService.formatForecast(forecast);
+      } catch (error) {
+        console.error('Erro ao carregar previsão do tempo:', error);
+        weatherSummary.textContent = 'Não foi possível obter a previsão';
+      }
     }
   }
 };
@@ -264,7 +328,7 @@ const App = {
   async init() {
     console.log('Portal Front Office iniciado.');
     
-    HeaderController.init();
+    await HeaderController.init();
     ThemeController.init();
 
     // Fetch and render data
