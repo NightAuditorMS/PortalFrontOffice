@@ -12,16 +12,16 @@
 }
 
 .light-theme {
-  --bg: #f4f6fb;
-  --surface: #ffffff;
-  --surface-2: #f0f2f8;
-  --border: #d8dde9;
-  --text: #1d2939;
-  --muted: #5f6f89;
-  --gold: #9c6b2e;
-  --gold-2: #c79f57;
-  --blue: #0c4870;
-  --blue-2: #0e5c94;
+  --bg: #f7efe1;
+  --surface: #fff9ef;
+  --surface-2: #f4ead9;
+  --border: #e3d3b7;
+  --text: #2d2a23;
+  --muted: #6e6251;
+  --gold: #ad8a43;
+  --gold-2: #d2b56b;
+  --blue: #264a6c;
+  --blue-2: #346687;
 }
 
 * { 
