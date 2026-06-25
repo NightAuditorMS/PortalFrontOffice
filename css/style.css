@@ -188,6 +188,34 @@ body.light-theme {
   font-size: 18px;
 }
 
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-label {
+  color: var(--muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-card strong {
+  font-size: 1.6rem;
+  color: var(--text);
+}
+
 /* Utilities */
 .muted {
   color: var(--muted);

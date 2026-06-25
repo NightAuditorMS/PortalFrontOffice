@@ -38,16 +38,16 @@ const DataService = {
       return [];
     }
   },
-  async fetchGuias() {
+  async fetchDailyReport() {
     try {
-      const response = await fetch('data/guias.json');
+      const response = await fetch('data/daily-report.json');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       return await response.json();
     } catch (error) {
-      console.error('Erro ao carregar guias:', error);
-      return [];
+      console.error('Erro ao carregar relatório diário:', error);
+      return null;
     }
   }
 };
@@ -109,24 +109,20 @@ const UIRenderer = {
 
     container.innerHTML = html;
   },
-  renderGuias(guias, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+  renderDailyReport(report) {
+    if (!report) return;
 
-    if (!guias || guias.length === 0) {
-      container.innerHTML = '<p class="muted">Nenhum local encontrado.</p>';
-      return;
-    }
+    const occupancy = document.getElementById('metric-occupancy');
+    const revenue = document.getElementById('metric-revenue');
+    const inHouse = document.getElementById('metric-inhouse');
+    const arrivals = document.getElementById('metric-arrivals');
+    const departures = document.getElementById('metric-departures');
 
-    const html = guias.map(guia => `
-      <article class="noticia-item">
-        <h3>${guia.name}</h3>
-        <span class="noticia-date">${guia.category}</span>
-        <p>${guia.description}</p>
-      </article>
-    `).join('');
-
-    container.innerHTML = html;
+    if (occupancy) occupancy.textContent = `${report.occupancy}%`;
+    if (revenue) revenue.textContent = `€ ${report.revenue.toLocaleString('pt-PT')}`;
+    if (inHouse) inHouse.textContent = `${report.inHouse}`;
+    if (arrivals) arrivals.textContent = `${report.arrivals}`;
+    if (departures) departures.textContent = `${report.departures}`;
   }
 };
 
@@ -305,24 +301,6 @@ const HeaderController = {
   }
 };
 
-// Search Module
-const SearchController = {
-  init(guiasData) {
-    const searchInput = document.getElementById('search-guias');
-    if (!searchInput) return;
-
-    searchInput.addEventListener('input', Utils.debounce((e) => {
-      const searchTerm = Utils.normalizeText(e.target.value);
-      const filteredGuias = guiasData.filter(guia => 
-        Utils.normalizeText(guia.name).includes(searchTerm) || 
-        Utils.normalizeText(guia.category).includes(searchTerm) || 
-        Utils.normalizeText(guia.description).includes(searchTerm)
-      );
-      UIRenderer.renderGuias(filteredGuias, 'guias-container');
-    }, 300));
-  }
-};
-
 // Main application logic
 const App = {
   async init() {
@@ -338,9 +316,8 @@ const App = {
     const eventos = await DataService.fetchEventos();
     UIRenderer.renderEventos(eventos, 'eventos-container');
 
-    const guias = await DataService.fetchGuias();
-    UIRenderer.renderGuias(guias, 'guias-container');
-    SearchController.init(guias);
+    const report = await DataService.fetchDailyReport();
+    UIRenderer.renderDailyReport(report);
 
     const links = await DataService.fetchLinks();
     UIRenderer.renderLinks(links, 'links-container');

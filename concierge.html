@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concierge Virtual</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="dashboard">
+    <header class="dashboard-header">
+      <div class="brand">
+        <h1>Concierge Virtual</h1>
+      </div>
+      <div class="header-controls">
+        <a class="theme-toggle" href="index.html">Dashboard</a>
+      </div>
+    </header>
+
+    <aside class="dashboard-sidebar">
+      <nav>
+        <ul>
+          <li><a href="index.html">Dashboard</a></li>
+          <li><a href="concierge.html" class="active">Concierge Virtual</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <section class="dashboard-grid">
+        <div class="card" id="guias-section">
+          <h2>Pesquisar Guias</h2>
+          <input type="text" id="search-guias" placeholder="Pesquisar restaurantes, locais..." style="width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box;">
+          <div id="guias-container" class="content-container">
+            <p class="loading">A carregar guias...</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/concierge.js"></script>
+</body>
+</html>
