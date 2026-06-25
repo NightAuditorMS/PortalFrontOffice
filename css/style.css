@@ -11,6 +11,19 @@
   --blue-2: #01344d;
 }
 
+.light-theme {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #f0f2f8;
+  --border: #d8dde9;
+  --text: #1d2939;
+  --muted: #5f6f89;
+  --gold: #9c6b2e;
+  --gold-2: #c79f57;
+  --blue: #0c4870;
+  --blue-2: #0e5c94;
+}
+
 * { 
   box-sizing: border-box; 
 }
@@ -20,6 +33,10 @@ body {
   background: var(--bg); 
   color: var(--text); 
   font-family: "Gill Sans Nova Light", Arial, sans-serif; 
+}
+
+body.light-theme {
+  background: var(--bg);
 }
 
 /* Dashboard Grid Layout */
@@ -42,10 +59,51 @@ body {
   padding: 15px 20px;
   background: var(--surface);
   border-bottom: 2px solid var(--gold);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
   position: sticky;
   top: 0;
   z-index: 10;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-controls .user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.greeting-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.weather-summary {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.theme-toggle {
+  border: none;
+  background: rgba(198,166,103,0.15);
+  color: var(--gold);
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  background: rgba(198,166,103,0.3);
+  transform: translateY(-1px);
 }
 
 .brand {

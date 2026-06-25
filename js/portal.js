@@ -144,6 +144,100 @@ const Utils = {
   normalizeText(text) {
     if (!text) return '';
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  },
+  clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+};
+
+const GreetingService = {
+  getGreeting() {
+    const hour = new Date().getHours();
+    if (hour >= 6 && hour < 12) {
+      return 'Bom dia';
+    }
+    if (hour >= 12 && hour < 18) {
+      return 'Boa tarde';
+    }
+    return 'Boa noite';
+  }
+};
+
+const WeatherService = {
+  getForecast() {
+    const now = new Date();
+    const hour = now.getHours();
+    const seed = now.getDate() + now.getMonth() + hour;
+    const forecasts = [
+      { description: 'Ensolarado', min: 19, max: 28 },
+      { description: 'Parcialmente nublado', min: 17, max: 25 },
+      { description: 'Nublado', min: 15, max: 23 },
+      { description: 'Chuva leve', min: 14, max: 21 },
+      { description: 'Chuviscos', min: 13, max: 20 },
+      { description: 'Ventoso', min: 16, max: 24 },
+      { description: 'Aberturas de sol', min: 18, max: 26 }
+    ];
+
+    const item = forecasts[seed % forecasts.length];
+    const min = item.min + (hour >= 18 || hour < 6 ? -1 : 0);
+    const max = item.max + (hour >= 18 || hour < 6 ? -1 : 0);
+
+    return {
+      description: item.description,
+      min: Utils.clamp(min, 8, 30),
+      max: Utils.clamp(max, 12, 34)
+    };
+  },
+
+  getForecastText() {
+    const forecast = this.getForecast();
+    return `${forecast.description} · min ${forecast.min}° · max ${forecast.max}°`;
+  }
+};
+
+const ThemeController = {
+  currentTheme: 'dark',
+
+  init() {
+    const storedTheme = localStorage.getItem('portal-theme');
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    this.currentTheme = storedTheme || (prefersLight ? 'light' : 'dark');
+    this.applyTheme(this.currentTheme);
+
+    const themeButton = document.getElementById('theme-toggle');
+    if (themeButton) {
+      themeButton.addEventListener('click', () => this.toggleTheme());
+    }
+  },
+
+  applyTheme(theme) {
+    document.body.classList.toggle('light-theme', theme === 'light');
+    localStorage.setItem('portal-theme', theme);
+    const themeButton = document.getElementById('theme-toggle');
+    if (themeButton) {
+      themeButton.textContent = theme === 'light' ? '🌙' : '☀️';
+      themeButton.setAttribute('aria-label', theme === 'light' ? 'Modo escuro' : 'Modo claro');
+    }
+  },
+
+  toggleTheme() {
+    this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+    this.applyTheme(this.currentTheme);
+  }
+};
+
+const HeaderController = {
+  init() {
+    const greetingText = document.getElementById('greeting-text');
+    const weatherSummary = document.getElementById('weather-summary');
+
+    if (greetingText) {
+      greetingText.textContent = GreetingService.getGreeting();
+    }
+
+    if (weatherSummary) {
+      weatherSummary.textContent = WeatherService.getForecastText();
+    }
   }
 };
 
@@ -170,6 +264,9 @@ const App = {
   async init() {
     console.log('Portal Front Office iniciado.');
     
+    HeaderController.init();
+    ThemeController.init();
+
     // Fetch and render data
     const noticias = await DataService.fetchNoticias();
     UIRenderer.renderNoticias(noticias, 'noticias-container');
