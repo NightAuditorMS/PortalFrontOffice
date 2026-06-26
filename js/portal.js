@@ -1,6 +1,6 @@
 // js/portal.js
 import { UIRenderer } from './UIRenderer.js';
-import { checkAuthStatus } from './auth.js';
+import { checkAuthStatus, logoutUser } from './auth.js';
 
 // Modular architecture - Data fetching module
 const DataService = {
@@ -253,8 +253,22 @@ const App = {
   }
 };
 
+function attachLogoutHandler() {
+  const logoutButton = document.getElementById('logout-button');
+  if (!logoutButton) return;
+  logoutButton.addEventListener('click', async () => {
+    try {
+      await logoutUser();
+      window.location.href = 'login.html';
+    } catch (error) {
+      alert(error.message || 'Não foi possível sair. Tente novamente.');
+    }
+  });
+}
+
 // Start the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', async () => {
   await checkAuthStatus();
   App.init();
+  attachLogoutHandler();
 });

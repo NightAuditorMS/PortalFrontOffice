@@ -4,6 +4,7 @@ import {
   sendSignInLinkToEmail,
   isSignInWithEmailLink,
   signInWithEmailLink,
+  signOut,
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
 
@@ -69,6 +70,15 @@ export async function initializeAuth() {
   }
 
   return null;
+}
+
+export async function logoutUser() {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error('Erro ao sair:', error);
+    throw new Error('Não foi possível sair. Tente novamente.');
+  }
 }
 
 export function checkAuthStatus() {
