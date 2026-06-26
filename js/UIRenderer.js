@@ -198,11 +198,14 @@ export const UIRenderer = {
       reportDate: report.reportDate ?? report.date ?? '',
     };
 
+    const headerDateEl = document.getElementById('header-date');
+    if (headerDateEl) {
+      headerDateEl.textContent = normalizedReport.reportDate 
+        ? `${this.formatDate(normalizedReport.reportDate)} · ` 
+        : '';
+    }
+
     const cards = [
-      {
-        label: 'Data',
-        value: normalizedReport.reportDate ? this.formatDate(normalizedReport.reportDate) : '-'
-      },
       {
         label: 'Ocupação',
         value: normalizedReport.occupancy != null ? `${normalizedReport.occupancy}%` : '-'
