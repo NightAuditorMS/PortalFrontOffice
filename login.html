@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Portal Front Office</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-page">
+  <main class="login-shell">
+    <section class="login-card card">
+      <div class="login-header">
+        <h1>Entrar no Portal</h1>
+        <p>Utilize o seu email e palavra-passe para aceder ao ambiente Front Office.</p>
+      </div>
+
+      <form id="login-form" class="login-form">
+        <div class="input-group">
+          <label for="login-email">Email</label>
+          <input id="login-email" name="email" type="email" placeholder="seu.email@exemplo.com" required>
+        </div>
+
+        <div class="input-group">
+          <label for="login-password">Palavra-passe</label>
+          <input id="login-password" name="password" type="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="primary-btn">Iniciar sessão</button>
+
+        <div id="login-error" class="error-message" aria-live="polite"></div>
+      </form>
+
+      <p class="login-note">Protegido por Firebase Authentication com email e palavra-passe.</p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { loginUser } from './js/auth.js';
+
+    const form = document.getElementById('login-form');
+    const errorEl = document.getElementById('login-error');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorEl.textContent = '';
+
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+
+      try {
+        await loginUser(email, password);
+        window.location.href = 'index.html';
+      } catch (error) {
+        errorEl.textContent = error.message || 'Erro ao iniciar sessão. Tente novamente.';
+      }
+    });
+  </script>
+</body>
+</html>
