@@ -90,20 +90,28 @@ body.light-theme {
 }
 
 .theme-toggle {
-  border: none;
-  background: rgba(198,166,103,0.15);
+  border: 1px solid rgba(198,166,103,0.25);
+  background: rgba(198,166,103,0.14);
   color: var(--gold);
   padding: 10px 14px;
+  min-width: 96px;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background 0.2s ease, transform 0.2s ease;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
-  background: rgba(198,166,103,0.3);
+  background: rgba(198,166,103,0.22);
+  border-color: rgba(198,166,103,0.45);
   transform: translateY(-1px);
+}
+
+.theme-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(198,166,103,0.18);
 }
 
 .brand {
