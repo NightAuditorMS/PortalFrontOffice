@@ -129,12 +129,25 @@ body.light-theme {
   background: var(--surface-2);
   border-right: 1px solid var(--border);
   padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .dashboard-sidebar nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.sidebar-footer {
+  padding: 0 20px 20px;
+}
+
+.sidebar-footer .theme-toggle {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
 }
 
 .dashboard-sidebar nav a {
