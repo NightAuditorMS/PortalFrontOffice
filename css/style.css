@@ -443,3 +443,119 @@ body.login-page {
   font-size: 0.92rem;
   line-height: 1.5;
 }
+
+/* ==========================================================================
+   Daily Report Detail Lists & Tables Styling
+   ========================================================================== */
+
+#daily-report-section {
+  grid-column: 1 / -1;
+}
+
+.report-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.details-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.details-card:hover {
+  border-color: rgba(198, 166, 103, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.details-card h3 {
+  color: var(--gold);
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.details-content {
+  flex: 1;
+  font-size: 14px;
+}
+
+/* Report Table Styling */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.report-table th {
+  color: var(--gold-2);
+  font-weight: 600;
+  padding: 10px 8px;
+  border-bottom: 2px solid var(--border);
+  text-transform: uppercase;
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+}
+
+.report-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.report-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Zebra Striping */
+.report-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.light-theme .report-table tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.015);
+}
+
+/* Row Hover Effect */
+.report-table tbody tr:hover {
+  background: rgba(198, 166, 103, 0.04);
+}
+
+/* Cell specifics */
+.cell-room {
+  font-weight: bold;
+  color: var(--gold);
+}
+
+.cell-pax {
+  text-align: center;
+}
+
+.report-table th.cell-pax {
+  text-align: center;
+}
+
+.cell-name strong {
+  font-weight: 600;
+}
+

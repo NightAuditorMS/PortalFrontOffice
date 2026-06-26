@@ -8,5 +8,59 @@
   "roomServiceRevenue": 1240.75,
   "restaurantRevenue": 3150.30,
   "spaRevenue": 820.40,
-  "averageRate": 145.75
+  "averageRate": 145.75,
+  "vips": [
+    {
+      "room": "101",
+      "name": "Cristiano Ronaldo",
+      "pax": 2,
+      "arrival": "26/06/2026",
+      "departure": "30/06/2026"
+    },
+    {
+      "room": "204",
+      "name": "Amália Rodrigues",
+      "pax": 1,
+      "arrival": "26/06/2026",
+      "departure": "28/06/2026"
+    },
+    {
+      "room": "302",
+      "name": "José Saramago",
+      "pax": 2,
+      "arrival": "26/06/2026",
+      "departure": "03/07/2026"
+    }
+  ],
+  "events": [
+    {
+      "time": "10:30",
+      "description": "Reunião de Direção Geral",
+      "location": "Sala D. Henrique"
+    },
+    {
+      "time": "15:00",
+      "description": "Workshop Vendas SANA",
+      "location": "Sala D. Filipa"
+    },
+    {
+      "time": "19:00",
+      "description": "Cocktail de Boas-vindas VIP",
+      "location": "Lobby Bar"
+    }
+  ],
+  "oosRooms": [
+    {
+      "roomNumber": "105",
+      "reason": "Limpeza profunda de alcatifa"
+    },
+    {
+      "roomNumber": "218",
+      "reason": "Reparação de ar condicionado"
+    },
+    {
+      "roomNumber": "402",
+      "reason": "Pintura de teto (infiltração wc)"
+    }
+  ]
 }

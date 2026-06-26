@@ -48,6 +48,49 @@
     "averageRate": {
       "type": "number",
       "description": "Tarifa média diária (ADR) em euros." 
+    },
+    "vips": {
+      "type": "array",
+      "description": "Lista de chegadas VIP.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "room": { "type": "string", "description": "Número do quarto do hóspede VIP." },
+          "name": { "type": "string", "description": "Nome completo do hóspede VIP." },
+          "pax": { "type": "integer", "description": "Número de ocupantes no quarto." },
+          "arrival": { "type": "string", "description": "Data ou hora de chegada prevista." },
+          "departure": { "type": "string", "description": "Data de partida prevista." }
+        },
+        "required": ["room", "name", "pax", "arrival", "departure"],
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "type": "array",
+      "description": "Lista de eventos agendados para o dia.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "time": { "type": "string", "description": "Horário de início do evento (ex: HH:MM)." },
+          "description": { "type": "string", "description": "Descrição sucinta do evento." },
+          "location": { "type": "string", "description": "Local de realização do evento." }
+        },
+        "required": ["time", "description", "location"],
+        "additionalProperties": false
+      }
+    },
+    "oosRooms": {
+      "type": "array",
+      "description": "Lista de quartos fora de serviço (Out of Order).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "roomNumber": { "type": "string", "description": "Número do quarto fora de serviço." },
+          "reason": { "type": "string", "description": "Motivo do bloqueio / indisponibilidade." }
+        },
+        "required": ["roomNumber", "reason"],
+        "additionalProperties": false
+      }
     }
   },
   "required": [

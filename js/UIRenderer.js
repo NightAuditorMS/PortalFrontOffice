@@ -57,6 +57,132 @@ export const UIRenderer = {
     container.innerHTML = html;
   },
 
+  renderDailyReport(report) {
+    if (!report) {
+      this.renderVIPs([], 'vips-container');
+      this.renderDailyEvents([], 'daily-events-container');
+      this.renderOOSRooms([], 'oos-container');
+      return;
+    }
+    this.renderVIPs(report.vips, 'vips-container');
+    this.renderDailyEvents(report.events, 'daily-events-container');
+    this.renderOOSRooms(report.oosRooms, 'oos-container');
+  },
+
+  renderVIPs(vips, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!vips || vips.length === 0) {
+      container.innerHTML = '<p class="muted">Sem VIPs previstos.</p>';
+      return;
+    }
+
+    const html = `
+      <div class="table-responsive">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Quarto</th>
+              <th>Nome</th>
+              <th>Pax</th>
+              <th>Chegada</th>
+              <th>Partida</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${vips.map(vip => `
+              <tr>
+                <td class="cell-room">${this.escapeHTML(vip.room)}</td>
+                <td class="cell-name"><strong>${this.escapeHTML(vip.name)}</strong></td>
+                <td class="cell-pax">${this.formatNumber(vip.pax)}</td>
+                <td class="cell-date">${this.escapeHTML(vip.arrival)}</td>
+                <td class="cell-date">${this.escapeHTML(vip.departure)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+    container.innerHTML = html;
+  },
+
+  renderDailyEvents(events, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!events || events.length === 0) {
+      container.innerHTML = '<p class="muted">Sem eventos agendados.</p>';
+      return;
+    }
+
+    const html = `
+      <div class="table-responsive">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Hora</th>
+              <th>Descrição</th>
+              <th>Local</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${events.map(event => `
+              <tr>
+                <td class="cell-time">${this.escapeHTML(event.time)}</td>
+                <td class="cell-desc">${this.escapeHTML(event.description)}</td>
+                <td class="cell-location">${this.escapeHTML(event.location)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+    container.innerHTML = html;
+  },
+
+  renderOOSRooms(oosRooms, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!oosRooms || oosRooms.length === 0) {
+      container.innerHTML = '<p class="muted">Sem quartos fora de serviço.</p>';
+      return;
+    }
+
+    const html = `
+      <div class="table-responsive">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Quarto</th>
+              <th>Motivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${oosRooms.map(room => `
+              <tr>
+                <td class="cell-room">${this.escapeHTML(room.roomNumber)}</td>
+                <td class="cell-reason">${this.escapeHTML(room.reason)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+    container.innerHTML = html;
+  },
+
+  escapeHTML(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  },
+
   renderDashboardCards(report) {
     const container = document.getElementById('daily-report-cards');
     if (!container) return;
