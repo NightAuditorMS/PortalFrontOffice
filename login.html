@@ -11,7 +11,7 @@
     <section class="login-card card">
       <div class="login-header">
         <h1>Entrar no Portal</h1>
-        <p>Utilize o seu email e palavra-passe para aceder ao ambiente Front Office.</p>
+        <p>Introduza o seu email para receber um link de acesso mágico.</p>
       </div>
 
       <form id="login-form" class="login-form">
@@ -20,38 +20,45 @@
           <input id="login-email" name="email" type="email" placeholder="seu.email@exemplo.com" required>
         </div>
 
-        <div class="input-group">
-          <label for="login-password">Palavra-passe</label>
-          <input id="login-password" name="password" type="password" placeholder="••••••••" required>
-        </div>
+        <button type="submit" class="primary-btn">Enviar Link de Acesso</button>
 
-        <button type="submit" class="primary-btn">Iniciar sessão</button>
-
-        <div id="login-error" class="error-message" aria-live="polite"></div>
+        <div id="login-message" class="error-message" aria-live="polite"></div>
       </form>
 
-      <p class="login-note">Protegido por Firebase Authentication com email e palavra-passe.</p>
+      <p class="login-note">Protegido por Firebase Authentication com Email Link (Passwordless).</p>
     </section>
   </main>
 
   <script type="module">
-    import { loginUser } from './js/auth.js';
+    import { initializeAuth, sendMagicLink } from './js/auth.js';
 
     const form = document.getElementById('login-form');
-    const errorEl = document.getElementById('login-error');
+    const messageEl = document.getElementById('login-message');
+
+    async function showMessage(text, isError = false) {
+      messageEl.textContent = text;
+      messageEl.style.color = isError ? '#ff7777' : '#b8b8b';
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await initializeAuth();
+      } catch (error) {
+        showMessage(error.message, true);
+      }
+    });
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      errorEl.textContent = '';
+      messageEl.textContent = '';
 
       const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value.trim();
 
       try {
-        await loginUser(email, password);
-        window.location.href = 'index.html';
+        await sendMagicLink(email);
+        showMessage('Link de acesso enviado. Verifique a sua caixa de entrada.');
       } catch (error) {
-        errorEl.textContent = error.message || 'Erro ao iniciar sessão. Tente novamente.';
+        showMessage(error.message || 'Erro ao enviar o link. Tente novamente.', true);
       }
     });
   </script>

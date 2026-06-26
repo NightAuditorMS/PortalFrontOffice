@@ -1,5 +1,6 @@
 // js/portal.js
 import { UIRenderer } from './UIRenderer.js';
+import { checkAuthStatus } from './auth.js';
 
 // Modular architecture - Data fetching module
 const DataService = {
@@ -253,6 +254,7 @@ const App = {
 };
 
 // Start the app when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await checkAuthStatus();
   App.init();
 });

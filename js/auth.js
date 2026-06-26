@@ -1,37 +1,74 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
+import {
+  getAuth,
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
 
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_PROJECT_ID.appspot.com',
-  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-  appId: 'YOUR_APP_ID'
+  apiKey: 'AIzaSyBGRBrpZi5y-eE5u4qR1QJFN2t9RDBv1Pw',
+  authDomain: 'portalfrontoffice-ms.firebaseapp.com',
+  projectId: 'portalfrontoffice-ms',
+  storageBucket: 'portalfrontoffice-ms.firebasestorage.app',
+  messagingSenderId: '288095166790',
+  appId: '1:288095166790:web:1ce98a98009e61d59f4547'
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const emailStorageKey = 'emailForSignIn';
 
-export async function loginUser(email, password) {
-  if (!email || !password) {
-    throw new Error('Email e palavra-passe são obrigatórios.');
+export async function sendMagicLink(email) {
+  if (!email) {
+    throw new Error('Email é obrigatório.');
   }
 
+  const actionCodeSettings = {
+    url: window.location.href,
+    handleCodeInApp: true
+  };
+
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+    window.localStorage.setItem(emailStorageKey, email);
+    return true;
   } catch (error) {
-    let message = 'Erro ao iniciar sessão.';
-    if (error.code === 'auth/user-not-found') {
-      message = 'Utilizador não encontrado.';
-    } else if (error.code === 'auth/wrong-password') {
-      message = 'Palavra-passe incorreta.';
-    } else if (error.code === 'auth/invalid-email') {
+    console.error('Erro ao enviar link mágico:', error);
+    let message = 'Não foi possível enviar o link de acesso. Tente novamente.';
+    if (error.code === 'auth/invalid-email') {
       message = 'Email inválido.';
+    } else if (error.code === 'auth/user-disabled') {
+      message = 'Conta desativada.';
     }
     throw new Error(message);
   }
+}
+
+export async function initializeAuth() {
+  if (isSignInWithEmailLink(auth, window.location.href)) {
+    let email = window.localStorage.getItem(emailStorageKey);
+    if (!email) {
+      email = window.prompt('Por favor insira o email usado para pedir o link de acesso:');
+    }
+
+    if (!email) {
+      throw new Error('Email necessário para completar o login via link.');
+    }
+
+    try {
+      const userCredential = await signInWithEmailLink(auth, email, window.location.href);
+      window.localStorage.removeItem(emailStorageKey);
+      window.location.href = 'index.html';
+      return userCredential.user;
+    } catch (error) {
+      console.error('Erro ao completar sign-in com link:', error);
+      throw new Error('Não foi possível efetuar login com o link. Verifique a sua caixa de entrada e tente novamente.');
+    }
+  }
+
+  return null;
 }
 
 export function checkAuthStatus() {

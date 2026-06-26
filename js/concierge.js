@@ -1,4 +1,5 @@
 // js/concierge.js
+import { checkAuthStatus } from './auth.js';
 
 const DataService = {
   async fetchGuias() {
@@ -76,4 +77,7 @@ const App = {
   }
 };
 
-window.addEventListener('DOMContentLoaded', () => App.init());
+window.addEventListener('DOMContentLoaded', async () => {
+  await checkAuthStatus();
+  App.init();
+});
