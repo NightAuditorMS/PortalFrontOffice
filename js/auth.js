@@ -26,14 +26,22 @@ export async function sendMagicLink(email) {
     throw new Error('Email é obrigatório.');
   }
 
+  const normalizedEmail = String(email).trim().toLowerCase();
+  const allowedDomain = '@mythic.sanahotels.com';
+  const domainPattern = new RegExp(`^[^@]+${allowedDomain.replace('.', '\\.')}$`, 'i');
+
+  if (!domainPattern.test(normalizedEmail)) {
+    throw new Error('Acesso negado. Utilize o seu e-mail corporativo (@mythic.sanahotels.com).');
+  }
+
   const actionCodeSettings = {
     url: window.location.href,
     handleCodeInApp: true
   };
 
   try {
-    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-    window.localStorage.setItem(emailStorageKey, email);
+    await sendSignInLinkToEmail(auth, normalizedEmail, actionCodeSettings);
+    window.localStorage.setItem(emailStorageKey, normalizedEmail);
     return true;
   } catch (error) {
     console.error('Erro ao enviar link mágico:', error);
