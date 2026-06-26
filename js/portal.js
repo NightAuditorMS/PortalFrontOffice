@@ -1,4 +1,5 @@
 // js/portal.js
+import { UIRenderer } from './UIRenderer.js';
 
 // Modular architecture - Data fetching module
 const DataService = {
@@ -49,80 +50,6 @@ const DataService = {
       console.error('Erro ao carregar relatório diário:', error);
       return null;
     }
-  }
-};
-
-// UI rendering module
-const UIRenderer = {
-  renderNoticias(noticias, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    if (!noticias || noticias.length === 0) {
-      container.innerHTML = '<p class="muted">Não há notícias disponíveis no momento.</p>';
-      return;
-    }
-
-    const html = noticias.map(noticia => `
-      <article class="noticia-item">
-        <h3>${noticia.title}</h3>
-        <span class="noticia-date">${noticia.date}</span>
-        <p>${noticia.content}</p>
-      </article>
-    `).join('');
-
-    container.innerHTML = html;
-  },
-  renderEventos(eventos, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    if (!eventos || eventos.length === 0) {
-      container.innerHTML = '<p class="muted">Não há eventos agendados.</p>';
-      return;
-    }
-
-    const html = eventos.map(evento => `
-      <article class="noticia-item">
-        <h3>${evento.title}</h3>
-        <span class="noticia-date">${evento.date}</span>
-        <p>${evento.description}</p>
-      </article>
-    `).join('');
-
-    container.innerHTML = html;
-  },
-  renderLinks(links, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    if (!links || links.length === 0) {
-      container.innerHTML = '<p class="muted">Não há links disponíveis.</p>';
-      return;
-    }
-
-    const html = `
-      <ul class="link-list">
-        ${links.map(link => `<li><a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.name}</a></li>`).join('')}
-      </ul>
-    `;
-
-    container.innerHTML = html;
-  },
-  renderDailyReport(report) {
-    if (!report) return;
-
-    const occupancy = document.getElementById('metric-occupancy');
-    const revenue = document.getElementById('metric-revenue');
-    const inHouse = document.getElementById('metric-inhouse');
-    const arrivals = document.getElementById('metric-arrivals');
-    const departures = document.getElementById('metric-departures');
-
-    if (occupancy) occupancy.textContent = `${report.occupancy}%`;
-    if (revenue) revenue.textContent = `€ ${report.revenue.toLocaleString('pt-PT')}`;
-    if (inHouse) inHouse.textContent = `${report.inHouse}`;
-    if (arrivals) arrivals.textContent = `${report.arrivals}`;
-    if (departures) departures.textContent = `${report.departures}`;
   }
 };
 
@@ -318,6 +245,7 @@ const App = {
 
     const report = await DataService.fetchDailyReport();
     UIRenderer.renderDailyReport(report);
+    UIRenderer.renderDashboardCards(report);
 
     const links = await DataService.fetchLinks();
     UIRenderer.renderLinks(links, 'links-container');

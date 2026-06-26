@@ -1,7 +1,12 @@
 {
-  "occupancy": 78,
-  "revenue": 12450,
-  "inHouse": 96,
-  "arrivals": 14,
-  "departures": 12
+  "reportDate": "2026-06-26",
+  "occupancy": 82,
+  "totalRevenue": 15840.50,
+  "inHouse": 104,
+  "arrivals": 18,
+  "departures": 16,
+  "roomServiceRevenue": 1240.75,
+  "restaurantRevenue": 3150.30,
+  "spaRevenue": 820.40,
+  "averageRate": 145.75
 }

@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Relatório Diário Front Office",
+  "description": "Esquema de dados diário para o relatório do Front Office, compatível com exportação futura do Power Automate.",
+  "type": "object",
+  "properties": {
+    "reportDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do relatório no formato ISO (YYYY-MM-DD)."
+    },
+    "occupancy": {
+      "type": "number",
+      "description": "Percentual de ocupação do hotel." 
+    },
+    "totalRevenue": {
+      "type": "number",
+      "description": "Receita total do dia em euros." 
+    },
+    "revenue": {
+      "type": "number",
+      "description": "Alias para receita total, utilizado para compatibilidade com versões anteriores." 
+    },
+    "inHouse": {
+      "type": "number",
+      "description": "Número de hóspedes em house." 
+    },
+    "arrivals": {
+      "type": "number",
+      "description": "Número de chegadas previstas." 
+    },
+    "departures": {
+      "type": "number",
+      "description": "Número de saídas previstas." 
+    },
+    "roomServiceRevenue": {
+      "type": "number",
+      "description": "Receita do room service em euros." 
+    },
+    "restaurantRevenue": {
+      "type": "number",
+      "description": "Receita do restaurante em euros." 
+    },
+    "spaRevenue": {
+      "type": "number",
+      "description": "Receita do spa em euros." 
+    },
+    "averageRate": {
+      "type": "number",
+      "description": "Tarifa média diária (ADR) em euros." 
+    }
+  },
+  "required": [
+    "reportDate",
+    "occupancy",
+    "totalRevenue",
+    "inHouse",
+    "arrivals",
+    "departures"
+  ],
+  "additionalProperties": false
+}

@@ -178,7 +178,27 @@ body.light-theme {
   display: flex;
   flex-direction: column;
 }
+.dashboard-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
+.dashboard-card strong {
+  font-size: 1.7rem;
+  color: var(--text);
+}
+
+.dashboard-card .metric-label {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
 .card h2 {
   color: var(--gold);
   margin-top: 0;
