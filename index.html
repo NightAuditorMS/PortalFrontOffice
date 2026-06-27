@@ -14,18 +14,33 @@
         <h1>Mythic Hotels</h1>
       </div>
       <div class="header-controls">
-        <div class="header-datetime">
-          <span id="current-date-time"></span>
+        <!-- Left Group: DateTime + Weather Forecast -->
+        <div class="header-left-group">
+          <div class="header-datetime">
+            <span id="current-date-time"></span>
+          </div>
+          <div class="header-weather">
+            <span id="weather-summary" class="weather-text">A carregar previsão...</span>
+          </div>
         </div>
-        <div class="header-divider">|</div>
-        <div class="header-profile">
-          <span id="user-profile-email" class="profile-email">A carregar perfil...</span>
-          <button class="logout-button-styled" id="logout-button" aria-label="Sair">Sair</button>
+
+        <div class="header-divider"></div>
+
+        <!-- Right Group: Profile + Duty Manager -->
+        <div class="header-right-group">
+          <div class="header-profile">
+            <span id="user-profile-email" class="profile-email">A carregar perfil...</span>
+            <button class="logout-button-styled" id="logout-button" aria-label="Sair">Sair</button>
+          </div>
+          <div class="duty-manager-card">
+            <span class="duty-manager-label">Duty Manager:</span>
+            <span class="duty-manager-value">Tarde / Noite</span>
+          </div>
         </div>
+
         <!-- Compatibility fallbacks for JS logic -->
         <span id="greeting-text" style="display: none;"></span>
         <span id="header-date" style="display: none;"></span>
-        <span id="weather-summary" style="display: none;"></span>
       </div>
     </header>
 

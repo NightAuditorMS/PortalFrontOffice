@@ -128,24 +128,7 @@ const WeatherService = {
   },
 
   async getLocation() {
-    if (!navigator.geolocation) {
-      return this.defaultLocation;
-    }
-
-    return new Promise(resolve => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          });
-        },
-        () => {
-          resolve(this.defaultLocation);
-        },
-        { timeout: 5000 }
-      );
-    });
+    return this.defaultLocation;
   },
 
   async fetchForecast() {

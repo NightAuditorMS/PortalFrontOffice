@@ -96,26 +96,49 @@ body.light-theme {
 .header-controls {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
+}
+
+.header-left-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 4px;
 }
 
 .header-datetime {
-  color: var(--muted);
+  color: var(--text);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.03em;
 }
 
+.weather-text {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .header-divider {
-  color: var(--border-strong);
-  font-weight: 300;
-  font-size: 16px;
+  width: 1px;
+  height: 38px;
+  background: var(--border-strong);
+  align-self: center;
+}
+
+.header-right-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 4px;
 }
 
 .header-profile {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .profile-email {
@@ -124,14 +147,31 @@ body.light-theme {
   font-weight: 600;
 }
 
+.duty-manager-card {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  display: flex;
+  gap: 4px;
+}
+
+.duty-manager-label {
+  color: var(--muted);
+}
+
+.duty-manager-value {
+  color: var(--gold-3);
+  font-weight: 600;
+}
+
 .logout-button-styled {
   border: 1px solid var(--border-strong);
   background: rgba(198, 166, 103, 0.08);
   color: var(--gold-2);
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
