@@ -40,8 +40,12 @@ body {
   margin: 0; 
   background: var(--bg); 
   color: var(--text); 
-  font-family: "Inter", "Segoe UI", Arial, sans-serif; 
+  font-family: "Gill Sans Nova Light", Arial, sans-serif; 
   min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
 }
 
 body.light-theme {
