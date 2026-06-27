@@ -101,5 +101,5 @@
     "arrivals",
     "departures"
   ],
-  "additionalProperties": false
+  "additionalProperties": true
 }

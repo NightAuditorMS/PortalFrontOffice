@@ -250,7 +250,6 @@ const App = {
 
     const report = await DataService.fetchDailyReport();
     UIRenderer.renderDailyReport(report);
-    UIRenderer.renderDashboardCards(report);
 
     const links = await DataService.fetchLinks();
     UIRenderer.renderLinks(links, 'links-container');

@@ -62,5 +62,66 @@
       "roomNumber": "402",
       "reason": "Pintura de teto (infiltração wc)"
     }
-  ]
+  ],
+  "currentMonthCalendar": [
+    11, 11, 8, 5, 8, 7, 5,
+    9, 9, 9, 6, 4, 2, 2,
+    0, 1, 5, 5, 5, 7, 4,
+    5, 2, 3, 3, 19, 17, 17,
+    10, 14
+  ],
+  "nextMonthCalendar": [
+    11, 11, 8, 5, 8, 7, 5,
+    9, 9, 9, 6, 4, 2, 2,
+    0, 1, 5, 5, 5, 7, 4,
+    5, 2, 3, 3, 19, 17, 17,
+    10, 14
+  ],
+  "financials": {
+    "adr": "145,75 €",
+    "revpar": "119,51 €",
+    "trevpar": "158,40 €",
+    "monthlyOccupancy": "78,50%"
+  },
+  "showRooms": [
+    { "type": "PRM", "room": "407" },
+    { "type": "JRS", "room": "-" },
+    { "type": "DLS", "room": "404" },
+    { "type": "GRS", "room": "201" },
+    { "type": "MSS", "room": "203" }
+  ],
+  "statsBudget": {
+    "alojamento": [
+      { "item": "Ocupação", "lastDay": "25,00%", "totalDaily": "0,00%", "budgetDaily": "26,48%", "totalMonthly": "40,86%", "budgetMonthly": "" },
+      { "item": "In-House", "lastDay": "19", "totalDaily": "13", "budgetDaily": "324", "totalMonthly": "380", "budgetMonthly": "" },
+      { "item": "Chegadas", "lastDay": "12", "totalDaily": "-", "budgetDaily": "138", "totalMonthly": "-", "budgetMonthly": "" },
+      { "item": "Saídas", "lastDay": "5", "totalDaily": "-", "budgetDaily": "134", "totalMonthly": "-", "budgetMonthly": "" },
+      { "item": "TOTAL ALOJAMENTO", "lastDay": "8 220,89 €", "totalDaily": "7 100,83 €", "budgetDaily": "134 283,70 €", "totalMonthly": "213 025,00 €", "budgetMonthly": "" }
+    ],
+    "fb": [
+      { "item": "Room Service", "lastDay": "19,47 €", "totalDaily": "-", "budgetDaily": "1 334,97 €", "totalMonthly": "950,00 €", "budgetMonthly": "" },
+      { "item": "P. A.", "lastDay": "905,66 €", "totalDaily": "-", "budgetDaily": "12 044,11 €", "totalMonthly": "21 508,00 €", "budgetMonthly": "" },
+      { "item": "Gastrobar", "lastDay": "201,77 €", "totalDaily": "1 015,57 €", "budgetDaily": "12 378,31 €", "totalMonthly": "30 467,00 €", "budgetMonthly": "" },
+      { "item": "Bar", "lastDay": "155,28 €", "totalDaily": "435,23 €", "budgetDaily": "11 234,55 €", "totalMonthly": "13 057,00 €", "budgetMonthly": "" },
+      { "item": "TOTAL F&B", "lastDay": "1 282,18 €", "totalDaily": "1 450,80 €", "budgetDaily": "36 991,94 €", "totalMonthly": "69 432,00 €", "budgetMonthly": "" }
+    ],
+    "diversos": [
+      { "item": "Lavandaria", "lastDay": "98,37 €", "totalDaily": "36,67 €", "budgetDaily": "771,54 €", "totalMonthly": "1 100,00 €", "budgetMonthly": "" },
+      { "item": "Transferes", "lastDay": "199,19 €", "totalDaily": "66,67 €", "budgetDaily": "2 788,62 €", "totalMonthly": "2 000,00 €", "budgetMonthly": "" },
+      { "item": "Estacionamento", "lastDay": "0,00 €", "totalDaily": "-", "budgetDaily": "109,96 €", "totalMonthly": "", "budgetMonthly": "" },
+      { "item": "SPA", "lastDay": "0,00 €", "totalDaily": "-", "budgetDaily": "0,00 €", "totalMonthly": "-", "budgetMonthly": "" },
+      { "item": "Diversos", "lastDay": "0,00 €", "totalDaily": "-", "budgetDaily": "247,97 €", "totalMonthly": "-", "budgetMonthly": "" },
+      { "item": "Telefone", "lastDay": "0,00 €", "totalDaily": "-", "budgetDaily": "0,00 €", "totalMonthly": "-", "budgetMonthly": "" },
+      { "item": "Diversos Blackmoon", "lastDay": "0,00 €", "totalDaily": "-", "budgetDaily": "40,65 €", "totalMonthly": "-", "budgetMonthly": "" },
+      { "item": "TOTAL ANEXOS + DIVERSOS", "lastDay": "297,56 €", "totalDaily": "103,33 €", "budgetDaily": "3 958,74 €", "totalMonthly": "3 100,00 €", "budgetMonthly": "" }
+    ],
+    "totalGeral": {
+      "item": "TOTAL GERAL",
+      "lastDay": "9 800,63 €",
+      "totalDaily": "8 654,97 €",
+      "budgetDaily": "175 234,38 €",
+      "totalMonthly": "285 557,00 €",
+      "budgetMonthly": ""
+    }
+  }
 }
