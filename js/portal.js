@@ -226,6 +226,27 @@ const HeaderController = {
         weatherSummary.textContent = 'Não foi possível obter a previsão';
       }
     }
+
+    // Dynamic Clock implementation
+    const clockEl = document.getElementById('current-date-time');
+    if (clockEl) {
+      const updateClock = () => {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('pt-PT', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+        const timeStr = now.toLocaleTimeString('pt-PT', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        clockEl.textContent = `${dateStr} | ${timeStr}`;
+      };
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
   }
 };
 
@@ -268,7 +289,13 @@ function attachLogoutHandler() {
 
 // Start the app when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', async () => {
-  await checkAuthStatus();
+  const user = await checkAuthStatus();
+  if (user) {
+    const profileEmailEl = document.getElementById('user-profile-email');
+    if (profileEmailEl) {
+      profileEmailEl.textContent = user.email || 'Utilizador';
+    }
+  }
   App.init();
   attachLogoutHandler();
 });

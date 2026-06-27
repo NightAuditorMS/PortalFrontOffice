@@ -205,42 +205,23 @@ export const UIRenderer = {
         : '';
     }
 
+    const totalRooms = 100;
+    const occupancy = normalizedReport.occupancy ?? 0;
+    const occupied = Math.round((occupancy / 100) * totalRooms);
+    const available = totalRooms - occupied;
+
     const cards = [
       {
-        label: 'Ocupação',
+        label: 'Taxa de Ocupação',
         value: normalizedReport.occupancy != null ? `${normalizedReport.occupancy}%` : '-'
       },
       {
-        label: 'Receita Total',
-        value: this.formatCurrency(normalizedReport.totalRevenue)
+        label: 'Available',
+        value: normalizedReport.occupancy != null ? String(available) : '-'
       },
       {
-        label: 'In-House',
-        value: this.formatNumber(normalizedReport.inHouse)
-      },
-      {
-        label: 'Chegadas',
-        value: this.formatNumber(normalizedReport.arrivals)
-      },
-      {
-        label: 'Saídas',
-        value: this.formatNumber(normalizedReport.departures)
-      },
-      {
-        label: 'Room Service',
-        value: this.formatCurrency(normalizedReport.roomServiceRevenue)
-      },
-      {
-        label: 'Restaurante',
-        value: this.formatCurrency(normalizedReport.restaurantRevenue)
-      },
-      {
-        label: 'Spa',
-        value: this.formatCurrency(normalizedReport.spaRevenue)
-      },
-      {
-        label: 'Tarifa Média',
-        value: this.formatCurrency(normalizedReport.averageRate)
+        label: 'Occupied',
+        value: normalizedReport.occupancy != null ? String(occupied) : '-'
       }
     ];
 

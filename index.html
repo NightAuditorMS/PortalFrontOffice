@@ -10,17 +10,22 @@
   <div class="dashboard">
     <header class="dashboard-header">
       <div class="brand">
-        <!-- Placeholder para o Logo -->
-        <h1>Portal Front Office</h1>
+        <span class="brand-logo">🏨</span>
+        <h1>Mythic Hotels</h1>
       </div>
       <div class="header-controls">
-        <div class="user-info" id="user-greeting">
-          <div class="greeting-text" id="greeting-text">Bom dia!</div>
-          <div class="weather-summary">
-            <span id="header-date"></span><span id="weather-summary">A carregar previsão...</span>
-          </div>
+        <div class="header-datetime">
+          <span id="current-date-time"></span>
         </div>
-        <button class="theme-toggle" id="logout-button" aria-label="Sair">Sair</button>
+        <div class="header-divider">|</div>
+        <div class="header-profile">
+          <span id="user-profile-email" class="profile-email">A carregar perfil...</span>
+          <button class="logout-button-styled" id="logout-button" aria-label="Sair">Sair</button>
+        </div>
+        <!-- Compatibility fallbacks for JS logic -->
+        <span id="greeting-text" style="display: none;"></span>
+        <span id="header-date" style="display: none;"></span>
+        <span id="weather-summary" style="display: none;"></span>
       </div>
     </header>
 
@@ -37,62 +42,65 @@
     </aside>
 
     <main class="dashboard-main">
-      <section class="dashboard-grid">
+      <!-- Section 1: Perfect 3-column Grid for Metric Cards -->
+      <section class="metrics-section">
+        <div class="metrics-grid" id="daily-report-cards">
+          <p class="loading">A carregar o relatório diário...</p>
+        </div>
+      </section>
 
-        <div class="card" id="daily-report-section">
-          <h2>Relatório Diário</h2>
-          <div class="metrics-grid" id="daily-report-cards">
-            <p class="muted">A carregar o relatório diário...</p>
-          </div>
-          <!-- Detalhes Adicionais do Relatório Diário -->
-          <div class="report-details-grid" id="daily-report-details">
-            <div class="details-card" id="vips-card">
-              <h3>Chegadas VIP</h3>
-              <div id="vips-container" class="details-content">
-                <p class="loading">A carregar VIPs...</p>
-              </div>
-            </div>
-            <div class="details-card" id="daily-events-card">
-              <h3>Eventos do Dia</h3>
-              <div id="daily-events-container" class="details-content">
-                <p class="loading">A carregar eventos...</p>
-              </div>
-            </div>
-            <div class="details-card" id="oos-card">
-              <h3>Quartos OOS</h3>
-              <div id="oos-container" class="details-content">
-                <p class="loading">A carregar quartos OOS...</p>
-              </div>
+      <!-- Section 2: Three Clean Parallel Columns for Detail Tables -->
+      <section class="details-section">
+        <div class="report-details-grid" id="daily-report-details">
+          <div class="details-card" id="vips-card">
+            <h3>Chegadas e Partidas</h3>
+            <div id="vips-container" class="details-content">
+              <p class="loading">A carregar...</p>
             </div>
           </div>
-        </div>
-
-        <div class="card" id="noticias-section">
-          <h2>Notícias</h2>
-          <div id="noticias-container" class="content-container">
-            <!-- Carregado via JS -->
-            <p class="loading">A carregar notícias...</p>
+          <div class="details-card" id="oos-card">
+            <h3>Quartos OOS</h3>
+            <div id="oos-container" class="details-content">
+              <p class="loading">A carregar...</p>
+            </div>
+          </div>
+          <div class="details-card" id="daily-events-card">
+            <h3>Eventos/VIPs</h3>
+            <div id="daily-events-container" class="details-content">
+              <p class="loading">A carregar...</p>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="card" id="eventos-section">
-          <h2>Eventos</h2>
-          <div id="eventos-container" class="content-container">
-            <p class="muted">Sem eventos agendados.</p>
+      <!-- Section 3: Secondary Content Grid -->
+      <section class="secondary-section">
+        <div class="secondary-grid">
+          <div class="card" id="noticias-section">
+            <h2>Notícias</h2>
+            <div id="noticias-container" class="content-container">
+              <p class="loading">A carregar notícias...</p>
+            </div>
+          </div>
+
+          <div class="card" id="eventos-section">
+            <h2>Eventos</h2>
+            <div id="eventos-container" class="content-container">
+              <p class="muted">Sem eventos agendados.</p>
+            </div>
+          </div>
+
+          <div class="card" id="links-section">
+            <h2>Links Úteis</h2>
+            <div id="links-container" class="content-container">
+              <ul class="link-list">
+                <li><a href="#">Checklist App</a></li>
+                <li><a href="#">Sistema MySana</a></li>
+                <li><a href="#">Intranet Corporativa</a></li>
+              </ul>
+            </div>
           </div>
         </div>
-
-        <div class="card" id="links-section">
-          <h2>Links Úteis</h2>
-          <div id="links-container" class="content-container">
-            <ul class="link-list">
-              <li><a href="#">Checklist App</a></li>
-              <li><a href="#">Sistema MySana</a></li>
-              <li><a href="#">Intranet Corporativa</a></li>
-            </ul>
-          </div>
-        </div>
-
       </section>
     </main>
   </div>
