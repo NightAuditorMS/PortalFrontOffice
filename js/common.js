@@ -270,13 +270,17 @@ export const SidebarDropdownController = {
 
 // Function to update user profile header UI
 function updateHeaderUI(email) {
+  // TEMPORARY DEV BYPASS - REMOVE IN PRODUCTION
+  const devBypassEmail = window.localStorage.getItem('dev_bypass');
+  const activeEmail = devBypassEmail || email;
+
   const profileEmailEl = document.getElementById('user-profile-email');
   if (profileEmailEl) {
-    profileEmailEl.textContent = email || 'Utilizador';
+    profileEmailEl.textContent = activeEmail || 'Utilizador';
   }
   
   // Check role and display Gerar Daily Report if user is Admin
-  const isAdmin = checkRole(email);
+  const isAdmin = checkRole(activeEmail);
   const gerarReportEl = document.getElementById('sidebar-gerar-report-item');
   if (gerarReportEl) {
     gerarReportEl.style.display = isAdmin ? 'block' : 'none';
@@ -284,17 +288,23 @@ function updateHeaderUI(email) {
 }
 
 function initCommon() {
-  // 1. Auth check using onAuthStateChanged to prevent state leakage
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      updateHeaderUI(user.email);
-    } else {
-      const path = window.location.pathname;
-      if (!path.endsWith('/login.html') && !path.endsWith('login.html')) {
-        window.location.href = 'login.html';
+  // TEMPORARY DEV BYPASS - REMOVE IN PRODUCTION
+  const devBypassEmail = window.localStorage.getItem('dev_bypass');
+  if (devBypassEmail) {
+    updateHeaderUI(devBypassEmail);
+  } else {
+    // 1. Auth check using onAuthStateChanged to prevent state leakage
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        updateHeaderUI(user.email);
+      } else {
+        const path = window.location.pathname;
+        if (!path.endsWith('/login.html') && !path.endsWith('login.html')) {
+          window.location.href = 'login.html';
+        }
       }
-    }
-  });
+    });
+  }
 
   // 2. Setup logout handler
   const logoutButton = document.getElementById('logout-button');

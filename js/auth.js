@@ -26,6 +26,13 @@ export async function sendMagicLink(email) {
     throw new Error('Email é obrigatório.');
   }
 
+  // TEMPORARY DEV BYPASS - REMOVE IN PRODUCTION
+  if (email === 'dev-nightauditor') {
+    window.localStorage.setItem('dev_bypass', 'nightauditor@mythic.sanahotels.com');
+    window.location.href = 'index.html';
+    return true;
+  }
+
   const normalizedEmail = String(email).trim().toLowerCase();
   const allowedDomain = '@mythic.sanahotels.com';
   const domainPattern = new RegExp(`^[^@]+${allowedDomain.replace('.', '\\.')}$`, 'i');
@@ -83,6 +90,9 @@ export async function initializeAuth() {
 
 export async function logoutUser() {
   try {
+    // TEMPORARY DEV BYPASS - REMOVE IN PRODUCTION
+    window.localStorage.removeItem('dev_bypass');
+
     window.localStorage.removeItem('emailForSignIn');
     await signOut(auth);
   } catch (error) {
@@ -92,6 +102,12 @@ export async function logoutUser() {
 }
 
 export function checkAuthStatus() {
+  // TEMPORARY DEV BYPASS - REMOVE IN PRODUCTION
+  const devBypassEmail = window.localStorage.getItem('dev_bypass');
+  if (devBypassEmail) {
+    return Promise.resolve({ email: devBypassEmail });
+  }
+
   return new Promise((resolve) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
