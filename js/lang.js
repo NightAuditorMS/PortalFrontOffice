@@ -197,6 +197,7 @@ export const translations = {
     "DIVERSOS": "DIVERSOS",
     
     // New Report Generator & Archive keys
+    "nav_arquivo": "Arquivo",
     "nav_gerar_report": "Gerar Daily Report",
     "nav_reports": "Arquivo de Relatórios",
     "report_title_label": "Gerar Relatório Diário",
@@ -211,6 +212,7 @@ export const translations = {
     "btn_add_oos": "+ Adicionar Quarto OOS",
     "btn_submit_report": "Gerar e Submeter Relatório",
     "lbl_search": "Pesquisar:",
+    "placeholder_search": "Pesquisar por nome...",
     "lbl_from": "De:",
     "lbl_to": "Até:",
     "lbl_type": "Tipo:",
@@ -219,7 +221,10 @@ export const translations = {
     "lbl_name": "Nome",
     "lbl_actions": "Ações",
     "btn_view_pdf": "Ver / Download PDF",
-    "msg_unauthorized_admin": "Acesso restrito. Redirecionando para a página principal..."
+    "msg_unauthorized_admin": "Acesso restrito. Redirecionando para a página principal...",
+    "msg_submit_success": "✅ SUCESSO! Relatório diário submetido ao SharePoint via Power Automate!",
+    "msg_submit_error": "⚠️ O SharePoint recusou os dados. Código de erro: ",
+    "msg_connection_error": "❌ ERRO DE CONEXÃO: "
   },
   en: {
     // Sidebar/Navigation
@@ -419,6 +424,7 @@ export const translations = {
     "DIVERSOS": "MISCELLANEOUS",
     
     // New Report Generator & Archive keys
+    "nav_arquivo": "Archive",
     "nav_gerar_report": "Generate Daily Report",
     "nav_reports": "Reports Archive",
     "report_title_label": "Generate Daily Report",
@@ -433,6 +439,7 @@ export const translations = {
     "btn_add_oos": "+ Add OOS Room",
     "btn_submit_report": "Generate & Submit Report",
     "lbl_search": "Search:",
+    "placeholder_search": "Search by name...",
     "lbl_from": "From:",
     "lbl_to": "To:",
     "lbl_type": "Type:",
@@ -441,7 +448,10 @@ export const translations = {
     "lbl_name": "Name",
     "lbl_actions": "Actions",
     "btn_view_pdf": "View / Download PDF",
-    "msg_unauthorized_admin": "Restricted access. Redirecting to home page..."
+    "msg_unauthorized_admin": "Restricted access. Redirecting to home page...",
+    "msg_submit_success": "✅ SUCCESS! Daily report submitted to SharePoint via Power Automate!",
+    "msg_submit_error": "⚠️ SharePoint rejected the data. Error code: ",
+    "msg_connection_error": "❌ CONNECTION ERROR: "
   }
 };
 

@@ -53,7 +53,15 @@
               <li id="sidebar-gerar-report-item" style="display: none;"><a href="gerar-report.html" id="nav-gerar-report" data-i18n="nav_gerar_report">Gerar Daily Report</a></li>
             </ul>
           </li>
-          <li><a href="relatorios.html" id="nav-reports" class="active" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
+          <li class="sidebar-dropdown-container">
+            <button class="sidebar-dropdown-btn" id="nav-arquivo-btn" aria-haspopup="true" aria-expanded="false">
+              <span data-i18n="nav_arquivo">Arquivo</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <ul class="sidebar-dropdown-menu" id="arquivo-menu">
+              <li><a href="relatorios.html" id="nav-reports" class="active" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <div class="sidebar-footer">
@@ -73,15 +81,15 @@
           <div class="meta-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
             <div>
               <label for="reportsSearch" style="font-weight:600;" data-i18n="lbl_search">Pesquisar</label>
-              <input type="text" id="reportsSearch" class="form-input" placeholder="Pesquisar por nome..." style="margin-bottom:0;">
+              <input type="text" id="reportsSearch" class="form-input" data-i18n="placeholder_search" placeholder="Pesquisar por nome..." style="margin-bottom:0;">
             </div>
             <div>
               <label for="reportsType" style="font-weight:600;" data-i18n="lbl_type">Tipo</label>
               <select id="reportsType" class="form-select" style="margin-bottom:0;">
                 <option value="all" data-i18n="lbl_all">Todos</option>
-                <option value="Daily Report">Daily Report</option>
-                <option value="Checklist">Checklist</option>
-                <option value="Contagem de Caixa">Contagem de Caixa</option>
+                <option value="Daily Report" data-i18n="type_daily_report">Daily Report</option>
+                <option value="Checklist" data-i18n="type_checklist">Checklist</option>
+                <option value="Contagem de Caixa" data-i18n="type_caixa">Contagem de Caixa</option>
               </select>
             </div>
             <div>

@@ -78,12 +78,18 @@ function renderReports(reports) {
 
   reports.forEach(report => {
     const tr = document.createElement('tr');
+    
+    let typeKey = 'type_daily_report';
+    if (report.type === 'Checklist') typeKey = 'type_checklist';
+    if (report.type === 'Contagem de Caixa') typeKey = 'type_caixa';
+    const localizedType = getTranslation(lang, typeKey);
+
     tr.innerHTML = `
       <td style="padding-left:20px; font-weight:500;">${formatReportDate(report.date)}</td>
       <td style="font-weight:600;">${report.name}</td>
-      <td><span class="badge" style="background: rgba(198,166,103,0.1); border: 1px solid rgba(198,166,103,0.3); color: var(--gold); padding: 4px 8px; border-radius: 4px; font-size:12px;">${report.type}</span></td>
+      <td><span class="badge" style="background: rgba(198,166,103,0.1); border: 1px solid rgba(198,166,103,0.3); color: var(--gold); padding: 4px 8px; border-radius: 4px; font-size:12px;">${localizedType}</span></td>
       <td style="padding-right:20px; text-align:right;">
-        <button class="pdf-btn btn-view-pdf" style="padding:6px 14px; font-size:12.5px; margin:0;" data-i18n="btn_view_pdf">Ver / Download PDF</button>
+        <button class="pdf-btn btn-view-pdf" style="padding:6px 14px; font-size:12.5px; margin:0;" data-i18n="btn_view_pdf">${getTranslation(lang, 'btn_view_pdf')}</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -106,36 +112,111 @@ function formatReportDate(dateStr) {
 }
 
 function handlePdfDownload(report) {
+  const lang = localStorage.getItem('portal-lang') || 'pt';
   if (!report.pdfUrl || report.pdfUrl === '#') {
     // Generate a simple report PDF dynamically for mock items
     if (window.jspdf?.jsPDF) {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+      let y = 10;
       
-      // Header border line
-      doc.setDrawColor(198, 166, 103); doc.setLineWidth(1); doc.line(10, 25, 200, 25);
+      // Premium Header Banner
+      doc.setFillColor(0, 38, 58); // Dark Navy
+      doc.rect(10, 10, 190, 22, 'F');
       
-      doc.setFontSize(20); doc.setTextColor(0, 38, 58);
-      doc.text(`Sana Mythic Hotel — Arquivo Histórico`, 10, 20);
+      doc.setFontSize(16);
+      doc.setTextColor(198, 166, 103); // Gold
+      doc.setFont("helvetica", "bold");
+      doc.text("SANA MYTHIC HOTEL", 15, 19);
       
-      doc.setFontSize(12); doc.setTextColor(0, 0, 0);
-      doc.text(`Relatório: ${report.name}`, 10, 35);
-      doc.text(`Data Operacional: ${formatReportDate(report.date)}`, 10, 43);
-      doc.text(`Tipo de Documento: ${report.type}`, 10, 51);
+      doc.setFontSize(11);
+      doc.setTextColor(255, 255, 255); // White
+      doc.setFont("helvetica", "normal");
+      doc.text(lang === 'en' ? `HISTORICAL ARCHIVE — ${formatReportDate(report.date)}` : `ARQUIVO HISTÓRICO — ${formatReportDate(report.date)}`, 15, 26);
       
-      doc.text(`Descrição do Arquivo:`, 10, 65);
-      doc.setFontSize(10); doc.setTextColor(60, 60, 60);
-      doc.text(`Este documento representa um registo histórico simulado restaurado das pastas de fecho`, 10, 72);
-      doc.text(`do dia no SharePoint. Para relatórios reais gerados recentemente, o visualizador irá`, 10, 77);
-      doc.text(`carregar e transferir o PDF idêntico ao gerado em tempo de execução pelo utilizador.`, 10, 82);
+      // Gold accent line
+      doc.setFillColor(198, 166, 103); // Gold
+      doc.rect(10, 32, 190, 1, 'F');
       
+      y = 42;
+
+      function addSectionHeader(title) {
+        doc.setFillColor(245, 245, 247); // Light gray background
+        doc.rect(10, y, 190, 8, 'F');
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11);
+        doc.setTextColor(0, 38, 58); // Navy
+        doc.text(title.toUpperCase(), 13, y + 5.5);
+        doc.setFillColor(198, 166, 103); // Gold line
+        doc.rect(10, y, 1.5, 8, 'F');
+        y += 14;
+      }
+
+      function addKeyValueRow(label1, val1, label2, val2) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.setTextColor(60, 60, 60);
+        doc.text(label1 + ":", 15, y);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(0, 0, 0);
+        doc.text(String(val1), 60, y);
+        
+        if (label2) {
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(60, 60, 60);
+          doc.text(label2 + ":", 105, y);
+          doc.setFont("helvetica", "normal");
+          doc.setTextColor(0, 0, 0);
+          doc.text(String(val2), 150, y);
+        }
+        y += 7;
+      }
+
+      // Metadata section
+      addSectionHeader(lang === 'en' ? 'Document Metadata' : 'Metadados do Documento');
+      addKeyValueRow(
+        lang === 'en' ? 'Document Name' : 'Nome do Documento', report.name,
+        lang === 'en' ? 'Document Type' : 'Tipo de Documento', getTranslation(lang, report.type === 'Checklist' ? 'type_checklist' : report.type === 'Contagem de Caixa' ? 'type_caixa' : 'type_daily_report')
+      );
+      addKeyValueRow(
+        lang === 'en' ? 'Operational Date' : 'Data Operacional', formatReportDate(report.date)
+      );
+      
+      y += 5;
+
+      // Report content section
+      addSectionHeader(lang === 'en' ? 'Archived Data Summary' : 'Resumo dos Dados Arquivados');
+      
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(50, 50, 50);
+      
+      const desc1 = lang === 'en' 
+        ? "This document represents a simulated historical record restored from the SharePoint closing folders."
+        : "Este documento representa um registo histórico simulado restaurado das pastas de fecho no SharePoint.";
+      const desc2 = lang === 'en'
+        ? "For recently generated reports, the viewer loads and downloads the identical PDF generated in real-time by the user."
+        : "Para relatórios reais gerados recentemente, o visualizador irá carregar e transferir o PDF idêntico ao gerado em tempo de execução.";
+      
+      doc.text(desc1, 15, y); y += 6;
+      doc.text(desc2, 15, y); y += 12;
+
       // Additional mock stats depending on report type
       if (report.type === 'Daily Report' && report.data) {
-        doc.setFontSize(12); doc.setTextColor(0, 38, 58);
-        doc.text(`Métricas Financeiras do Fecho:`, 10, 95);
-        doc.setFontSize(10); doc.setTextColor(0, 0, 0);
-        doc.text(` - Percentagem Ocupação: ${report.data.occupancy}%`, 10, 103);
-        doc.text(` - Receita Total de Caixa: ${report.data.totalRevenue.toFixed(2)} €`, 10, 110);
+        addKeyValueRow(
+          lang === 'en' ? 'Occupancy Rate' : 'Taxa de Ocupação', `${report.data.occupancy}%`,
+          lang === 'en' ? 'Total Revenue' : 'Receita Total', `${report.data.totalRevenue.toFixed(2)} €`
+        );
+      } else if (report.type === 'Checklist' && report.data) {
+        addKeyValueRow(
+          lang === 'en' ? 'Auditor' : 'Auditor', report.data.auditor,
+          lang === 'en' ? 'Shift' : 'Turno', getTranslation(lang, 'shift_' + report.data.shift)
+        );
+      } else if (report.type === 'Contagem de Caixa' && report.data) {
+        addKeyValueRow(
+          lang === 'en' ? 'Cash Count Total' : 'Total de Caixa', `${report.data.totalCaixa.toFixed(2)} €`,
+          lang === 'en' ? 'Calculated Deposit' : 'Depósito Efetuado', `${report.data.deposito.toFixed(2)} €`
+        );
       }
       
       doc.save(`${report.name.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);

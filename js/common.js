@@ -125,6 +125,13 @@ export const LanguageController = {
         activeSpan.textContent = lang === 'en' ? 'Reception' : 'Receção';
       }
     }
+    const archiveBtn = document.getElementById('nav-arquivo-btn');
+    if (archiveBtn) {
+      const activeSpan = archiveBtn.querySelector('span:first-child');
+      if (activeSpan) {
+        activeSpan.textContent = lang === 'en' ? 'Archive' : 'Arquivo';
+      }
+    }
     
     // Trigger localized custom event so specific page renderers can redraw
     const event = new CustomEvent('languageChanged', { detail: { lang } });
@@ -177,65 +184,86 @@ export const ClockController = {
 // Sidebar Dropdown Controller
 export const SidebarDropdownController = {
   init() {
-    const btn = document.getElementById('nav-rececao-btn');
-    const menu = document.getElementById('rececao-menu');
+    const dropdownBtns = document.querySelectorAll('.sidebar-dropdown-btn');
+    const path = window.location.pathname;
     
-    if (btn && menu) {
-      // Toggle dropdown open/close on click
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const open = menu.classList.contains('show');
-        if (open) {
-          menu.classList.remove('show');
-          btn.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-        } else {
-          menu.classList.add('show');
-          btn.classList.add('open');
-          btn.setAttribute('aria-expanded', 'true');
-        }
-      });
+    dropdownBtns.forEach(btn => {
+      const menu = btn.nextElementSibling;
+      if (menu && menu.classList.contains('sidebar-dropdown-menu')) {
+        // Toggle dropdown open/close on click
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const open = menu.classList.contains('show');
+          if (open) {
+            menu.classList.remove('show');
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+          } else {
+            menu.classList.add('show');
+            btn.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      }
+    });
 
-      // Expand automatically if current page is checklist.html, caixa.html, or gerar-report.html
-      const path = window.location.pathname;
-      if (path.endsWith('checklist.html') || path.endsWith('caixa.html') || path.endsWith('gerar-report.html')) {
+    // Expand automatically if current page is checklist.html, caixa.html, or gerar-report.html
+    if (path.endsWith('checklist.html') || path.endsWith('caixa.html') || path.endsWith('gerar-report.html')) {
+      const btn = document.getElementById('nav-rececao-btn');
+      const menu = document.getElementById('rececao-menu');
+      if (btn && menu) {
         menu.classList.add('show');
         btn.classList.add('open');
         btn.setAttribute('aria-expanded', 'true');
-        
-        // Add active classes to submenus
-        if (path.endsWith('checklist.html')) {
-          const checklistLink = document.getElementById('nav-checklist');
-          if (checklistLink) checklistLink.classList.add('active');
-        }
-        if (path.endsWith('caixa.html')) {
-          const caixaLink = document.getElementById('nav-caixa');
-          if (caixaLink) caixaLink.classList.add('active');
-        }
-        if (path.endsWith('gerar-report.html')) {
-          const gerarLink = document.getElementById('nav-gerar-report');
-          if (gerarLink) gerarLink.classList.add('active');
-        }
-      }
-
-      if (path.endsWith('relatorios.html')) {
-        const reportsLink = document.getElementById('nav-reports');
-        if (reportsLink) reportsLink.classList.add('active');
       }
       
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!btn.contains(e.target) && !menu.contains(e.target)) {
-          // If we are on checklist, caixa, or gerar-report pages, do NOT collapse the menu on outside clicks
-          if (path.endsWith('checklist.html') || path.endsWith('caixa.html') || path.endsWith('gerar-report.html')) {
-            return;
+      // Add active classes to submenus
+      if (path.endsWith('checklist.html')) {
+        const checklistLink = document.getElementById('nav-checklist');
+        if (checklistLink) checklistLink.classList.add('active');
+      }
+      if (path.endsWith('caixa.html')) {
+        const caixaLink = document.getElementById('nav-caixa');
+        if (caixaLink) caixaLink.classList.add('active');
+      }
+      if (path.endsWith('gerar-report.html')) {
+        const gerarLink = document.getElementById('nav-gerar-report');
+        if (gerarLink) gerarLink.classList.add('active');
+      }
+    }
+
+    if (path.endsWith('relatorios.html')) {
+      const btn = document.getElementById('nav-arquivo-btn');
+      const menu = document.getElementById('arquivo-menu');
+      if (btn && menu) {
+        menu.classList.add('show');
+        btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      const reportsLink = document.getElementById('nav-reports');
+      if (reportsLink) reportsLink.classList.add('active');
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      dropdownBtns.forEach(btn => {
+        const menu = btn.nextElementSibling;
+        if (menu && menu.classList.contains('sidebar-dropdown-menu')) {
+          if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            // Keep specific dropdowns open on their respective pages
+            if (path.endsWith('checklist.html') || path.endsWith('caixa.html') || path.endsWith('gerar-report.html')) {
+              if (btn.id === 'nav-rececao-btn') return;
+            }
+            if (path.endsWith('relatorios.html')) {
+              if (btn.id === 'nav-arquivo-btn') return;
+            }
+            menu.classList.remove('show');
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
           }
-          menu.classList.remove('show');
-          btn.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
         }
       });
-    }
+    });
   }
 };
 

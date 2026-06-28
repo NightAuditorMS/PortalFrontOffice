@@ -23,16 +23,12 @@ function initGerarReport() {
 
   // VIP handlers
   $('#btnAddVip').addEventListener('click', () => addVipRow());
-  // Add an initial empty row for guidance
-  addVipRow();
 
   // Event handlers
   $('#btnAddEvent').addEventListener('click', () => addEventRow());
-  addEventRow();
 
   // OOS handlers
   $('#btnAddOos').addEventListener('click', () => addOosRow());
-  addOosRow();
 
   // Form submit handler
   $('#formDailyReport').addEventListener('submit', async (e) => {
@@ -133,51 +129,176 @@ async function submitDailyReport() {
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  let y = 15;
-  const pw = 190, margin = 10;
+  let y = 10;
+  
+  // Premium Header Banner
+  doc.setFillColor(0, 38, 58); // Dark Navy
+  doc.rect(10, 10, 190, 22, 'F');
+  
+  doc.setFontSize(16);
+  doc.setTextColor(198, 166, 103); // Gold
+  doc.setFont("helvetica", "bold");
+  doc.text("SANA MYTHIC HOTEL", 15, 19);
+  
+  doc.setFontSize(11);
+  doc.setTextColor(255, 255, 255); // White
+  doc.setFont("helvetica", "normal");
+  doc.text(lang === 'en' ? `DAILY REPORT — ${reportData.reportDate}` : `RELATÓRIO DIÁRIO — ${reportData.reportDate}`, 15, 26);
+  
+  // Gold accent line under header banner
+  doc.setFillColor(198, 166, 103); // Gold
+  doc.rect(10, 32, 190, 1, 'F');
+  
+  y = 42;
 
-  function addLine(txt, size = 11, color = [0, 0, 0], gap = 6) {
-    doc.setFontSize(size); doc.setTextColor(...color);
-    const lines = doc.splitTextToSize(String(txt), pw);
-    if (y + (lines.length * 5) > 285) { doc.addPage(); y = 15; }
-    doc.text(lines, margin, y);
-    y += Math.max(gap, lines.length * 5);
+  function addSectionHeader(title) {
+    if (y + 15 > 280) { doc.addPage(); y = 15; }
+    doc.setFillColor(245, 245, 247); // Light gray background for section title
+    doc.rect(10, y, 190, 8, 'F');
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(0, 38, 58); // Navy
+    doc.text(title.toUpperCase(), 13, y + 5.5);
+    doc.setFillColor(198, 166, 103); // Gold indicator line
+    doc.rect(10, y, 1.5, 8, 'F');
+    y += 14;
   }
 
-  // Header Title Design
-  doc.setFontSize(20); doc.setTextColor(0, 38, 58);
-  doc.text(`Relatório Diário - ${reportData.reportDate}`, 10, y); y += 8;
-  doc.setDrawColor(198, 166, 103); doc.setLineWidth(1); doc.line(10, y, 200, y); y += 8;
+  function addKeyValueRow(label1, val1, label2, val2) {
+    if (y + 8 > 280) { doc.addPage(); y = 15; }
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(60, 60, 60);
+    doc.text(label1 + ":", 15, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(0, 0, 0);
+    doc.text(String(val1), 60, y);
+    
+    if (label2) {
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(60, 60, 60);
+      doc.text(label2 + ":", 105, y);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0, 0, 0);
+      doc.text(String(val2), 150, y);
+    }
+    y += 7;
+  }
 
-  addLine(`Métricas Operacionais:`, 13, [198, 166, 103], 7);
-  addLine(`Data: ${reportData.reportDate} | Ocupação: ${reportData.occupancy}% | In-House: ${reportData.inHouse} Pax`);
-  addLine(`Chegadas: ${reportData.arrivals} | Saídas: ${reportData.departures}`, 11, [0,0,0], 8);
+  function drawTableHeader(headers, widths) {
+    if (y + 12 > 280) { doc.addPage(); y = 15; }
+    doc.setFillColor(0, 38, 58); // Navy header
+    doc.rect(10, y, 190, 7, 'F');
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255); // White text
+    
+    let currentX = 12;
+    headers.forEach((header, idx) => {
+      doc.text(header, currentX, y + 4.8);
+      currentX += widths[idx];
+    });
+    
+    y += 7;
+  }
 
-  addLine(`Métricas Financeiras:`, 13, [198, 166, 103], 7);
-  addLine(`Receita Total (Revenue): ${reportData.totalRevenue.toFixed(2)} €`);
-  addLine(`ADR (Tarifa Média): ${reportData.averageRate.toFixed(2)} €`);
-  addLine(`Room Service: ${reportData.roomServiceRevenue.toFixed(2)} € | Restaurante: ${reportData.restaurantRevenue.toFixed(2)} € | SPA: ${reportData.spaRevenue.toFixed(2)} €`, 11, [0,0,0], 8);
+  function drawTableRow(data, widths, isEven) {
+    if (y + 10 > 280) { doc.addPage(); y = 15; }
+    if (isEven) {
+      doc.setFillColor(245, 245, 247);
+      doc.rect(10, y, 190, 6, 'F');
+    }
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(0, 0, 0);
+    
+    let currentX = 12;
+    data.forEach((val, idx) => {
+      const txt = doc.splitTextToSize(String(val), widths[idx] - 4);
+      doc.text(txt, currentX, y + 4.2);
+      currentX += widths[idx];
+    });
+    y += 6;
+  }
 
+  // 1. Operational Section
+  const optTitle = getTranslation(lang, 'section_kpis');
+  addSectionHeader(optTitle);
+  addKeyValueRow(
+    lang === 'en' ? 'Operational Date' : 'Data Operacional', reportData.reportDate,
+    lang === 'en' ? 'Occupancy' : 'Ocupação', `${reportData.occupancy}%`
+  );
+  addKeyValueRow(
+    lang === 'en' ? 'In-House Guests' : 'Hóspedes In-House', reportData.inHouse,
+    lang === 'en' ? 'Arrivals' : 'Chegadas', reportData.arrivals
+  );
+  addKeyValueRow(
+    lang === 'en' ? 'Departures' : 'Saídas', reportData.departures
+  );
+  
+  y += 5;
+
+  // 2. Financial Section
+  const finTitle = getTranslation(lang, 'section_financials');
+  addSectionHeader(finTitle);
+  addKeyValueRow(
+    lang === 'en' ? 'Total Revenue' : 'Receita Total', `${reportData.totalRevenue.toFixed(2)} €`,
+    lang === 'en' ? 'Average Rate (ADR)' : 'Tarifa Média (ADR)', `${reportData.averageRate.toFixed(2)} €`
+  );
+  addKeyValueRow(
+    lang === 'en' ? 'Room Service' : 'Room Service', `${reportData.roomServiceRevenue.toFixed(2)} €`,
+    lang === 'en' ? 'Restaurant' : 'Restaurante', `${reportData.restaurantRevenue.toFixed(2)} €`
+  );
+  addKeyValueRow(
+    lang === 'en' ? 'Spa' : 'Spa', `${reportData.spaRevenue.toFixed(2)} €`
+  );
+
+  y += 5;
+
+  // 3. VIP Arrivals Section
   if (vips.length > 0) {
-    addLine(`Chegadas VIP:`, 13, [198, 166, 103], 7);
-    vips.forEach(v => {
-      addLine(` - Quarto ${v.room} | ${v.name} (${v.pax} Pax) | Chegada: ${v.arrival} | Partida: ${v.departure}`, 10, [0,0,0], 5);
+    const vipTitle = getTranslation(lang, 'section_vips');
+    addSectionHeader(vipTitle);
+    const vipHeaders = lang === 'en' 
+      ? ['Room', 'Name', 'Pax', 'Arrival', 'Departure']
+      : ['Quarto', 'Nome', 'Pax', 'Chegada', 'Partida'];
+    const vipWidths = [25, 75, 15, 35, 40];
+    
+    drawTableHeader(vipHeaders, vipWidths);
+    vips.forEach((v, i) => {
+      drawTableRow([v.room, v.name, v.pax, v.arrival, v.departure], vipWidths, i % 2 === 1);
     });
-    y += 3;
+    y += 5;
   }
 
+  // 4. Events Section
   if (events.length > 0) {
-    addLine(`Eventos do Dia:`, 13, [198, 166, 103], 7);
-    events.forEach(ev => {
-      addLine(` - Hora: ${ev.time} | ${ev.description} | Local: ${ev.location}`, 10, [0,0,0], 5);
+    const evTitle = getTranslation(lang, 'section_events');
+    addSectionHeader(evTitle);
+    const evHeaders = lang === 'en'
+      ? ['Time', 'Description', 'Location']
+      : ['Hora', 'Descrição', 'Localização'];
+    const evWidths = [30, 90, 70];
+    
+    drawTableHeader(evHeaders, evWidths);
+    events.forEach((ev, i) => {
+      drawTableRow([ev.time, ev.description, ev.location], evWidths, i % 2 === 1);
     });
-    y += 3;
+    y += 5;
   }
 
+  // 5. OOS Section
   if (oosRooms.length > 0) {
-    addLine(`Quartos OOS (Out of Service):`, 13, [198, 166, 103], 7);
-    oosRooms.forEach(o => {
-      addLine(` - Quarto ${o.roomNumber} | Motivo: ${o.reason}`, 10, [0,0,0], 5);
+    const oosTitle = getTranslation(lang, 'section_oos');
+    addSectionHeader(oosTitle);
+    const oosHeaders = lang === 'en'
+      ? ['Room', 'Reason']
+      : ['Quarto', 'Motivo'];
+    const oosWidths = [40, 150];
+    
+    drawTableHeader(oosHeaders, oosWidths);
+    oosRooms.forEach((o, i) => {
+      drawTableRow([o.roomNumber, o.reason], oosWidths, i % 2 === 1);
     });
   }
 
@@ -209,12 +330,12 @@ async function submitDailyReport() {
       body: JSON.stringify(payload)
     });
     if (resp.ok) {
-      alert("✅ SUCESSO! Relatório diário submetido ao SharePoint via Power Automate!");
+      alert(getTranslation(lang, 'msg_submit_success'));
       location.reload();
     } else {
-      alert("⚠️ O SharePoint recusou os dados. Código de erro: " + resp.status);
+      alert(getTranslation(lang, 'msg_submit_error') + resp.status);
     }
   } catch (error) {
-    alert("❌ ERRO DE CONEXÃO: " + error.message);
+    alert(getTranslation(lang, 'msg_connection_error') + error.message);
   }
 }

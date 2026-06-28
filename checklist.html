@@ -56,7 +56,15 @@
               <li id="sidebar-gerar-report-item" style="display: none;"><a href="gerar-report.html" id="nav-gerar-report" data-i18n="nav_gerar_report">Gerar Daily Report</a></li>
             </ul>
           </li>
-          <li><a href="relatorios.html" id="nav-reports" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
+          <li class="sidebar-dropdown-container">
+            <button class="sidebar-dropdown-btn" id="nav-arquivo-btn" aria-haspopup="true" aria-expanded="false">
+              <span data-i18n="nav_arquivo">Arquivo</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <ul class="sidebar-dropdown-menu" id="arquivo-menu">
+              <li><a href="relatorios.html" id="nav-reports" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <div class="sidebar-footer">
