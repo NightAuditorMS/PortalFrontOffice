@@ -283,8 +283,7 @@ function updateHeaderUI(email) {
   }
 }
 
-// Common DOM initialization
-document.addEventListener('DOMContentLoaded', async () => {
+function initCommon() {
   // 1. Auth check using onAuthStateChanged to prevent state leakage
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -315,4 +314,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   LanguageController.init();
   ClockController.init();
   SidebarDropdownController.init();
-});
+}
+
+// Check document readystate to handle race conditions with cached modules
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCommon);
+} else {
+  initCommon();
+}
