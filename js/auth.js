@@ -17,8 +17,8 @@ const firebaseConfig = {
   appId: '1:288095166790:web:1ce98a98009e61d59f4547'
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 const emailStorageKey = 'emailForSignIn';
 
 export async function sendMagicLink(email) {
@@ -69,6 +69,7 @@ export async function initializeAuth() {
     try {
       const userCredential = await signInWithEmailLink(auth, email, window.location.href);
       window.localStorage.removeItem(emailStorageKey);
+      window.localStorage.removeItem('emailForSignIn');
       window.location.href = 'index.html';
       return userCredential.user;
     } catch (error) {
@@ -82,6 +83,7 @@ export async function initializeAuth() {
 
 export async function logoutUser() {
   try {
+    window.localStorage.removeItem('emailForSignIn');
     await signOut(auth);
   } catch (error) {
     console.error('Erro ao sair:', error);
@@ -91,8 +93,6 @@ export async function logoutUser() {
 
 export function checkAuthStatus() {
   return new Promise((resolve) => {
-    resolve({ email: 'nightauditor@mythic.sanahotels.com' });
-    /*
     onAuthStateChanged(auth, (user) => {
       if (user) {
         resolve(user);
@@ -104,7 +104,6 @@ export function checkAuthStatus() {
         resolve(null);
       }
     });
-    */
   });
 }
 

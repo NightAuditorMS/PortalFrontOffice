@@ -1,4 +1,5 @@
-import { checkAuthStatus, logoutUser, checkRole } from './auth.js';
+import { checkAuthStatus, logoutUser, checkRole, auth } from './auth.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
 import { translatePage } from './lang.js';
 
 // Weather Service
@@ -267,23 +268,34 @@ export const SidebarDropdownController = {
   }
 };
 
+// Function to update user profile header UI
+function updateHeaderUI(email) {
+  const profileEmailEl = document.getElementById('user-profile-email');
+  if (profileEmailEl) {
+    profileEmailEl.textContent = email || 'Utilizador';
+  }
+  
+  // Check role and display Gerar Daily Report if user is Admin
+  const isAdmin = checkRole(email);
+  const gerarReportEl = document.getElementById('sidebar-gerar-report-item');
+  if (gerarReportEl) {
+    gerarReportEl.style.display = isAdmin ? 'block' : 'none';
+  }
+}
+
 // Common DOM initialization
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Auth check
-  const user = await checkAuthStatus();
-  if (user) {
-    const profileEmailEl = document.getElementById('user-profile-email');
-    if (profileEmailEl) {
-      profileEmailEl.textContent = user.email || 'Utilizador';
+  // 1. Auth check using onAuthStateChanged to prevent state leakage
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      updateHeaderUI(user.email);
+    } else {
+      const path = window.location.pathname;
+      if (!path.endsWith('/login.html') && !path.endsWith('login.html')) {
+        window.location.href = 'login.html';
+      }
     }
-    
-    // Check role and display Gerar Daily Report if user is Admin
-    const isAdmin = checkRole(user.email);
-    const gerarReportEl = document.getElementById('sidebar-gerar-report-item');
-    if (gerarReportEl) {
-      gerarReportEl.style.display = isAdmin ? 'block' : 'none';
-    }
-  }
+  });
 
   // 2. Setup logout handler
   const logoutButton = document.getElementById('logout-button');
