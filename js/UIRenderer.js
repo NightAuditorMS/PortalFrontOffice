@@ -1,3 +1,5 @@
+import { getTranslation } from './lang.js';
+
 export const UIRenderer = {
   renderNoticias(noticias, containerId) {
     const container = document.getElementById(containerId);
@@ -69,38 +71,40 @@ export const UIRenderer = {
     const container = document.getElementById(containerId);
     if (!container) return;
 
+    const lang = localStorage.getItem('portal-lang') || 'pt';
+
     const occ = report.occupancy != null ? `${report.occupancy}%` : '-';
     const res = report.inHouse != null ? String(report.inHouse) : '-';
     const arr = report.arrivals != null ? String(report.arrivals) : '-';
     const dep = report.departures != null ? String(report.departures) : '-';
 
-    const col1CalendarHTML = this.generateCalendarHTML('Mês atual', report.currentMonthCalendar);
-    const col2CalendarHTML = this.generateCalendarHTML('Mês próximo mês', report.nextMonthCalendar);
+    const col1CalendarHTML = this.generateCalendarHTML(getTranslation(lang, 'Mês atual'), report.currentMonthCalendar);
+    const col2CalendarHTML = this.generateCalendarHTML(getTranslation(lang, 'Mês próximo mês'), report.nextMonthCalendar);
     const col3FinancialsHTML = this.generateFinancialsCardHTML(report.financials);
     const col4ShowRoomsHTML = this.generateShowRoomsHTML(report.showRooms);
 
     container.innerHTML = `
       <div class="section-container">
         <div class="section-header-block">
-          <h2>Título da secção</h2>
-          <div class="section-title-desc">O hotel hoje</div>
+          <h2>${getTranslation(lang, 'hotel_today_title')}</h2>
+          <div class="section-title-desc">${getTranslation(lang, 'hotel_today_desc')}</div>
         </div>
 
         <div class="kpi-row">
           <div class="kpi-card">
-            <span class="kpi-label">Ocupação do dia %</span>
+            <span class="kpi-label">${getTranslation(lang, 'kpi_occupancy')}</span>
             <div class="kpi-value">${occ}</div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label">Residentes</span>
+            <span class="kpi-label">${getTranslation(lang, 'kpi_inhouse')}</span>
             <div class="kpi-value">${res}</div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label">Chegadas</span>
+            <span class="kpi-label">${getTranslation(lang, 'kpi_arrivals')}</span>
             <div class="kpi-value">${arr}</div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label">Saídas</span>
+            <span class="kpi-label">${getTranslation(lang, 'kpi_departures')}</span>
             <div class="kpi-value">${dep}</div>
           </div>
         </div>
@@ -167,6 +171,7 @@ export const UIRenderer = {
   },
 
   generateFinancialsCardHTML(financials) {
+    const lang = localStorage.getItem('portal-lang') || 'pt';
     const adr = financials?.adr ?? '-';
     const revpar = financials?.revpar ?? '-';
     const trevpar = financials?.trevpar ?? '-';
@@ -189,7 +194,7 @@ export const UIRenderer = {
               <td class="fin-value">${trevpar}</td>
             </tr>
             <tr>
-              <td class="fin-label">Ocupação mês até agora</td>
+              <td class="fin-label">${getTranslation(lang, 'Ocupação mês até agora')}</td>
               <td class="fin-value">${occupancy}</td>
             </tr>
           </tbody>
@@ -199,6 +204,7 @@ export const UIRenderer = {
   },
 
   generateShowRoomsHTML(showRooms = []) {
+    const lang = localStorage.getItem('portal-lang') || 'pt';
     const rows = showRooms.map(item => `
       <tr>
         <td class="showroom-type">${item.type}</td>
@@ -209,17 +215,17 @@ export const UIRenderer = {
     return `
       <div class="col4-container">
         <div class="showroom-card">
-          <h4>Show Rooms</h4>
+          <h4>${getTranslation(lang, 'showroom_title')}</h4>
           <table class="showroom-table">
             <tbody>
-              ${rows || '<tr><td colspan="2" class="muted">Sem informação</td></tr>'}
+              ${rows || `<tr><td colspan="2" class="muted">${getTranslation(lang, 'Sem informação')}</td></tr>`}
             </tbody>
           </table>
         </div>
         <div class="status-placeholder-card">
           <div>
             <div style="font-size: 24px; margin-bottom: 4px;">✓</div>
-            <span>Tudo Operacional</span>
+            <span>${getTranslation(lang, 'status_operational')}</span>
           </div>
         </div>
       </div>
@@ -235,6 +241,7 @@ export const UIRenderer = {
       return;
     }
 
+    const lang = localStorage.getItem('portal-lang') || 'pt';
     const sb = report.statsBudget;
 
     const buildCategoryHTML = (title, items, headerClass, totalRowClass) => {
@@ -244,7 +251,7 @@ export const UIRenderer = {
         const rowStyle = isTotal ? `class="${totalRowClass}"` : '';
         rowsHTML += `
           <tr ${rowStyle}>
-            <td>${this.escapeHTML(item.item)}</td>
+            <td>${getTranslation(lang, item.item)}</td>
             <td>${this.escapeHTML(item.lastDay)}</td>
             <td>${this.escapeHTML(item.totalDaily)}</td>
             <td>${this.escapeHTML(item.budgetDaily)}</td>
@@ -256,7 +263,7 @@ export const UIRenderer = {
 
       return `
         <tr class="category-header-row">
-          <td colspan="6" class="category-header-cell ${headerClass}">${title}</td>
+          <td colspan="6" class="category-header-cell ${headerClass}">${getTranslation(lang, title)}</td>
         </tr>
         ${rowsHTML}
       `;
@@ -269,7 +276,7 @@ export const UIRenderer = {
     const tg = sb.totalGeral || { item: 'TOTAL GERAL', lastDay: '-', totalDaily: '-', budgetDaily: '-', totalMonthly: '-', budgetMonthly: '' };
     const totalGeralHTML = `
       <tr class="total-geral-row">
-        <td><strong>${this.escapeHTML(tg.item)}</strong></td>
+        <td><strong>${getTranslation(lang, tg.item)}</strong></td>
         <td><strong>${this.escapeHTML(tg.lastDay)}</strong></td>
         <td><strong>${this.escapeHTML(tg.totalDaily)}</strong></td>
         <td><strong>${this.escapeHTML(tg.budgetDaily)}</strong></td>
@@ -281,18 +288,18 @@ export const UIRenderer = {
     container.innerHTML = `
       <div class="section-container">
         <div class="section-header-block">
-          <div class="section-title-desc">Secção estatísticas e budget - Mês atual</div>
+          <div class="section-title-desc">${getTranslation(lang, 'stats_budget_desc')}</div>
         </div>
         <div class="stats-table-container">
           <table class="stats-budget-table">
             <thead>
               <tr>
-                <th>Estatísticas e Receitas Dia anterior</th>
-                <th>Alojamento</th>
-                <th>Total (diário)</th>
-                <th>Budget (diário)</th>
-                <th>Total (mensal)</th>
-                <th>Budget (mensal)</th>
+                <th>${getTranslation(lang, 'th_stats_revenue')}</th>
+                <th>${getTranslation(lang, 'th_accommodation')}</th>
+                <th>${getTranslation(lang, 'th_total_daily')}</th>
+                <th>${getTranslation(lang, 'th_budget_daily')}</th>
+                <th>${getTranslation(lang, 'th_total_monthly')}</th>
+                <th>${getTranslation(lang, 'th_budget_monthly')}</th>
               </tr>
             </thead>
             <tbody>

@@ -11,7 +11,7 @@
     <header class="dashboard-header">
       <div class="brand">
         <img src="MythicSanaHotelLogoCor.png" alt="Sana Mythic Hotel" class="brand-logo-img">
-        <h1>Portal Front Office</h1>
+        <h1 data-i18n="header_title">Portal Front Office</h1>
       </div>
       <div class="header-controls">
         <!-- Left Group: DateTime + Weather Forecast -->
@@ -20,7 +20,7 @@
             <span id="current-date-time"></span>
           </div>
           <div class="header-weather">
-            <span id="weather-summary" class="weather-text">A carregar previsão...</span>
+            <span id="weather-summary" class="weather-text" data-i18n="weather_loading">A carregar previsão...</span>
           </div>
         </div>
 
@@ -30,11 +30,11 @@
         <div class="header-right-group">
           <div class="header-profile">
             <span id="user-profile-email" class="profile-email">A carregar perfil...</span>
-            <button class="logout-button-styled" id="logout-button" aria-label="Sair">Sair</button>
+            <button class="logout-button-styled" id="logout-button" aria-label="Sair" data-i18n="logout_btn">Sair</button>
           </div>
           <div class="duty-manager-card">
-            <span class="duty-manager-label">Duty Manager:</span>
-            <span class="duty-manager-value">Tarde / Noite</span>
+            <span class="duty-manager-label" data-i18n="duty_manager">Duty Manager:</span>
+            <span class="duty-manager-value" data-i18n="duty_manager_value">Tarde / Noite</span>
           </div>
         </div>
 
@@ -47,48 +47,61 @@
     <aside class="dashboard-sidebar">
       <nav>
         <ul>
-          <li><a href="index.html" class="active">Dashboard</a></li>
-          <li><a href="concierge.html">Concierge Virtual</a></li>
+          <li><a href="index.html" class="active" id="nav-dashboard" data-i18n="nav_dashboard">Dashboard</a></li>
+          <li><a href="concierge.html" id="nav-concierge" data-i18n="nav_concierge">Concierge Virtual</a></li>
+          <li class="sidebar-dropdown-container">
+            <button class="sidebar-dropdown-btn" id="nav-rececao-btn" aria-haspopup="true" aria-expanded="false">
+              <span data-i18n="nav_rececao">Receção</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <ul class="sidebar-dropdown-menu" id="rececao-menu">
+              <li><a href="checklist.html" id="nav-checklist" data-i18n="nav_checklist">Checklist de Turno</a></li>
+              <li><a href="caixa.html" id="nav-caixa" data-i18n="nav_caixa">Contagem de Caixa</a></li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <div class="sidebar-footer">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema">🌙</button>
+        <div class="footer-controls">
+          <button class="lang-toggle-btn" id="lang-toggle" aria-label="Alterar idioma">PT / EN</button>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema">🌙</button>
+        </div>
       </div>
     </aside>
 
     <main class="dashboard-main">
       <!-- Section 1: Hotel Section (KPIs and 4-Column Layout) -->
       <section class="hotel-section" id="hotel-section-container">
-        <p class="loading">A carregar secção hotel...</p>
+        <p class="loading" data-i18n="weather_loading">A carregar secção hotel...</p>
       </section>
 
       <!-- Section 2: Stats & Budget Section -->
       <section class="stats-budget-section" id="stats-budget-container">
-        <p class="loading">A carregar estatísticas e budget...</p>
+        <p class="loading" data-i18n="weather_loading">A carregar estatísticas e budget...</p>
       </section>
 
       <!-- Section 3: Secondary Content Grid -->
       <section class="secondary-section">
         <div class="secondary-grid">
           <div class="card" id="noticias-section">
-            <h2>Notícias</h2>
+            <h2 data-i18n="noticias_title">Notícias</h2>
             <div id="noticias-container" class="content-container">
-              <p class="loading">A carregar notícias...</p>
+              <p class="loading" data-i18n="loading_news">A carregar notícias...</p>
             </div>
           </div>
 
           <div class="card" id="eventos-section">
-            <h2>Eventos</h2>
+            <h2 data-i18n="eventos_title">Eventos</h2>
             <div id="eventos-container" class="content-container">
-              <p class="muted">Sem eventos agendados.</p>
+              <p class="muted" data-i18n="no_events">Sem eventos agendados.</p>
             </div>
           </div>
 
           <div class="card" id="links-section">
-            <h2>Links Úteis</h2>
+            <h2 data-i18n="links_title">Links Úteis</h2>
             <div id="links-container" class="content-container">
               <ul class="link-list">
-                <li><a href="#">Checklist App</a></li>
+                <li><a href="checklist.html" data-i18n="nav_checklist">Checklist de Turno</a></li>
                 <li><a href="#">Sistema MySana</a></li>
                 <li><a href="#">Intranet Corporativa</a></li>
               </ul>

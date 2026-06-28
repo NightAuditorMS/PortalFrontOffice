@@ -218,6 +218,10 @@ body.light-theme {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .dashboard-sidebar nav ul {
@@ -227,7 +231,8 @@ body.light-theme {
 }
 
 .sidebar-footer {
-  padding: 0 20px 20px;
+  padding: 20px;
+  border-top: 1px solid var(--border);
 }
 
 .sidebar-footer .theme-toggle {
@@ -1088,5 +1093,653 @@ body.login-page {
   .kpi-row {
     grid-template-columns: 1fr;
   }
+}
+
+/* ==========================================================================
+   Checklist and Cash Counting Integration (styles from ChecklistApp)
+   ========================================================================== */
+
+/* Tabs Navigation styling if needed */
+.tabs-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  font-size: 16px;
+  transition: 0.3s;
+  font-family: inherit;
+}
+
+.tab-btn:hover {
+  background: var(--surface-2);
+  color: var(--gold);
+}
+
+.tab-btn.active {
+  background: var(--gold);
+  color: #111111;
+  border-color: var(--gold);
+  font-weight: 600;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Phase and final button styles */
+.phase-btn, .final-btn, .pdf-btn, .secondary-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .25s ease;
+  font-family: inherit;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.phase-btn {
+  margin-top: 10px;
+  background: var(--blue);
+  color: #ffffff;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.phase-btn:hover {
+  background: var(--blue-2);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+.phase-btn:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(198, 166, 103, 0.22), transparent);
+  animation: shine .8s linear;
+}
+
+@keyframes shine {
+  from { left: -100%; }
+  to { left: 100%; }
+}
+
+.phase-content {
+  display: none;
+  background: var(--surface-2);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 18px;
+  margin-top: 8px;
+  animation: phaseOpen .25s ease forwards;
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+@keyframes phaseOpen {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Inputs in checklist/caixa forms */
+.form-select, .form-input, .form-textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 8px;
+  color: var(--text);
+  margin-top: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-select:focus, .form-input:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: var(--gold-glow);
+  background: var(--surface);
+}
+
+.form-select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Checklist specific */
+li.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: .2s ease;
+  border: 1px solid transparent;
+}
+
+li.check-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: var(--border);
+}
+
+li.unchecked-warning {
+  background: rgba(231, 76, 60, 0.15) !important;
+  border-color: #e74c3c !important;
+}
+
+li.optional-item {
+  background: rgba(198, 166, 103, 0.04);
+  border: 1px dashed rgba(198, 166, 103, 0.25);
+}
+
+.optional-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  border-radius: 999px;
+  background: rgba(198, 166, 103, 0.1);
+  color: var(--gold-2);
+  border: 1px solid rgba(198, 166, 103, 0.18);
+  font-weight: 500;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 12px 0 16px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: rgba(198, 166, 103, 0.04);
+  border: 1px dashed rgba(198, 166, 103, 0.25);
+  display: inline-block;
+}
+
+.help-btn {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.help-btn:hover {
+  background: rgba(198, 166, 103, 0.15);
+}
+
+.help-btn[aria-expanded="true"] {
+  background: rgba(198, 166, 103, 0.2);
+  color: var(--text);
+}
+
+.check-wrap {
+  display: block;
+  flex: 1;
+}
+
+.check-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.check-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  cursor: pointer;
+  accent-color: var(--gold);
+}
+
+.item-text {
+  flex: 1;
+  font-size: 14px;
+}
+
+.help-text {
+  display: none;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--gold);
+  background: rgba(198, 166, 103, 0.05);
+  color: var(--muted);
+  font-size: 13.5px;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.5;
+}
+
+.help-text.open {
+  display: block;
+}
+
+.path-box {
+  background: #0f1015;
+  border: 1px dashed rgba(198, 166, 103, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.download-links {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.download-links a {
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 13.5px;
+  transition: all 0.2s ease;
+}
+
+.download-links a:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: var(--gold-glow);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.final-btn {
+  background: var(--gold);
+  color: #111111;
+}
+
+.final-btn:hover {
+  background: var(--gold-2);
+  box-shadow: var(--gold-glow);
+}
+
+.pdf-btn {
+  background: #27ae60;
+  color: #ffffff;
+}
+
+.pdf-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 10px rgba(39, 174, 96, 0.3);
+}
+
+.secondary-btn {
+  background: #2e303b;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.secondary-btn:hover {
+  background: #3e4150;
+  color: #ffffff;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.section-note {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-top: -4px;
+  margin-bottom: 12px;
+}
+
+.footer-note {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin-top: 10px;
+}
+
+.section-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 16px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.bulk-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.bulk-toggle input[type="checkbox"] {
+  accent-color: var(--gold);
+}
+
+.phase-btn[aria-expanded="true"] {
+  background: var(--blue-2);
+}
+
+.checklist-continua {
+  background: var(--surface-2);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 18px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.checklist-continua .section-header {
+  color: var(--gold);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 20px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.checklist-continua .section-header:first-child {
+  margin-top: 0;
+}
+
+/* Cashier specific */
+.cash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.cash-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface-2);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.cash-table th, .cash-table td {
+  padding: 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+  font-size: 14px;
+}
+
+.cash-table th {
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--gold-2);
+  font-weight: 600;
+}
+
+.cash-table .row-total {
+  text-align: right;
+  color: var(--gold);
+  font-weight: bold;
+  min-width: 100px;
+  font-size: 14px;
+}
+
+.cash-table input {
+  margin: 0;
+  padding: 8px;
+  width: 90px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+}
+
+.cash-table input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: var(--gold-glow);
+}
+
+.dynamic-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+}
+
+.dynamic-table th {
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--gold-2);
+  padding: 12px;
+  border: 1px solid var(--border);
+  font-size: 13.5px;
+}
+
+.dynamic-table td {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+}
+
+.dynamic-table input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text);
+  padding: 6px;
+  font-family: inherit;
+  font-size: 13.5px;
+}
+
+.dynamic-table input:focus {
+  border-color: var(--gold);
+  background: var(--surface-2);
+  outline: none;
+  border-radius: 4px;
+}
+
+.total-row {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--gold);
+  text-align: right;
+  padding: 16px;
+  background: rgba(198, 166, 103, 0.04);
+  border-radius: 8px;
+  margin-top: 16px;
+  border: 1px solid var(--gold);
+}
+
+/* Sidebar Custom Scrollbar & sticky height adjustments */
+.dashboard-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dashboard-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dashboard-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+
+.dashboard-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(198, 166, 103, 0.3);
+}
+
+/* Dropdown Sub-links Styles */
+.sidebar-dropdown-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-dropdown-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 14px 20px;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  border-left: 4px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  text-align: left;
+  transition: 0.2s ease;
+}
+
+.sidebar-dropdown-btn:hover,
+.sidebar-dropdown-btn.active {
+  background: rgba(198, 166, 103, 0.05);
+  border-left-color: var(--gold);
+  color: var(--gold);
+}
+
+.dropdown-arrow {
+  font-size: 9px;
+  transition: transform 0.2s ease;
+  color: var(--muted);
+}
+
+.sidebar-dropdown-btn.open .dropdown-arrow {
+  transform: rotate(180deg);
+  color: var(--gold);
+}
+
+.sidebar-dropdown-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-dropdown-menu.show {
+  display: block;
+}
+
+.sidebar-dropdown-menu a {
+  padding: 10px 20px 10px 36px !important;
+  font-size: 13.5px;
+  font-weight: 400;
+}
+
+.sidebar-dropdown-menu a.active {
+  color: var(--gold) !important;
+  font-weight: 600 !important;
+}
+
+/* Footer layout inside sidebar */
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.lang-toggle-btn {
+  border: 1px solid var(--border-strong);
+  background: rgba(198, 166, 103, 0.08);
+  color: var(--gold);
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  letter-spacing: 0.05em;
+  font-family: inherit;
+}
+
+.lang-toggle-btn:hover {
+  background: rgba(198, 166, 103, 0.18);
+  border-color: var(--gold);
+  box-shadow: var(--gold-glow);
+}
+
+.theme-toggle {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
 }
 

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="nav_caixa">Contagem de Caixa</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="dashboard">
+    <header class="dashboard-header">
+      <div class="brand">
+        <img src="MythicSanaHotelLogoCor.png" alt="Sana Mythic Hotel" class="brand-logo-img">
+        <h1 data-i18n="header_title">Portal Front Office</h1>
+      </div>
+      <div class="header-controls">
+        <div class="header-left-group">
+          <div class="header-datetime">
+            <span id="current-date-time"></span>
+          </div>
+          <div class="header-weather">
+            <span id="weather-summary" class="weather-text" data-i18n="weather_loading">A carregar previsão...</span>
+          </div>
+        </div>
+        <div class="header-divider"></div>
+        <div class="header-right-group">
+          <div class="header-profile">
+            <span id="user-profile-email" class="profile-email">A carregar perfil...</span>
+            <button class="logout-button-styled" id="logout-button" aria-label="Sair" data-i18n="logout_btn">Sair</button>
+          </div>
+          <div class="duty-manager-card">
+            <span class="duty-manager-label" data-i18n="duty_manager">Duty Manager:</span>
+            <span class="duty-manager-value" data-i18n="duty_manager_value">Tarde / Noite</span>
+          </div>
+        </div>
+        <span id="greeting-text" style="display: none;"></span>
+        <span id="header-date" style="display: none;"></span>
+      </div>
+    </header>
+
+    <aside class="dashboard-sidebar">
+      <nav>
+        <ul>
+          <li><a href="index.html" id="nav-dashboard" data-i18n="nav_dashboard">Dashboard</a></li>
+          <li><a href="concierge.html" id="nav-concierge" data-i18n="nav_concierge">Concierge Virtual</a></li>
+          <li class="sidebar-dropdown-container">
+            <button class="sidebar-dropdown-btn" id="nav-rececao-btn" aria-haspopup="true" aria-expanded="false">
+              <span data-i18n="nav_rececao">Receção</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <ul class="sidebar-dropdown-menu" id="rececao-menu">
+              <li><a href="checklist.html" id="nav-checklist" data-i18n="nav_checklist">Checklist de Turno</a></li>
+              <li><a href="caixa.html" id="nav-caixa" class="active" data-i18n="nav_caixa">Contagem de Caixa</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="footer-controls">
+          <button class="lang-toggle-btn" id="lang-toggle" aria-label="Alterar idioma">PT / EN</button>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema">🌙</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <section class="card">
+        <h2 data-i18n="nav_caixa">Contagem de Caixa</h2>
+        <div class="section-note" data-i18n="cash_counting_desc">Insira as quantidades de moedas, notas e comprovativos de fecho para este turno.</div>
+
+        <!-- Shift Metadata Details -->
+        <div class="card" style="background: rgba(255,255,255,0.01); border-color: var(--border); margin-bottom: 24px; padding: 18px;">
+          <div class="meta-grid">
+            <div>
+              <label style="font-weight:600;" data-i18n="field_current_shift">Turno Atual</label>
+              <select id="cashTurnoAtual" class="form-select" style="margin-bottom:0;">
+                <option value="" disabled selected data-i18n="select_placeholder">Selecionar...</option>
+                <option value="noite" data-i18n="shift_night">Auditoria (Noite)</option>
+                <option value="manha" data-i18n="shift_morning">Manhã</option>
+                <option value="tarde" data-i18n="shift_afternoon">Tarde</option>
+                <option value="doorman" data-i18n="shift_doorman">Doorman / Bagageiro</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-weight:600;" data-i18n="field_current_rec">Rececionista Atual</label>
+              <input id="cashRececionistaAtual" type="text" placeholder="Nome do auditor..." data-i18n="field_rec_name_placeholder" class="form-input" style="margin-bottom:0;">
+            </div>
+            <div>
+              <label style="font-weight:600;" data-i18n="field_next_shift">Próximo Turno</label>
+              <select id="cashTurnoProximo" class="form-select" style="margin-bottom:0;">
+                <option value="" disabled selected data-i18n="select_placeholder">Selecionar...</option>
+                <option value="noite" data-i18n="shift_night">Auditoria (Noite)</option>
+                <option value="manha" data-i18n="shift_morning">Manhã</option>
+                <option value="tarde" data-i18n="shift_afternoon">Tarde</option>
+                <option value="doorman" data-i18n="shift_doorman">Doorman / Bagageiro</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-weight:600;" data-i18n="field_next_rec">Próximo Rececionista</label>
+              <input id="cashRececionistaProximo" type="text" placeholder="Nome do próximo..." data-i18n="field_rec_name_placeholder" class="form-input" style="margin-bottom:0;">
+            </div>
+          </div>
+        </div>
+
+        <div class="cash-grid">
+          <!-- Notes Matrix -->
+          <div>
+            <h3 data-i18n="notes_title">Notas (€)</h3>
+            <table class="cash-table" id="tableNotas">
+              <thead>
+                <tr>
+                  <th data-i18n="th_denomination">Nota</th>
+                  <th data-i18n="th_quantity">Qtd</th>
+                  <th data-i18n="th_total">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>500€</td><td><input type="number" data-value="500" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>200€</td><td><input type="number" data-value="200" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>100€</td><td><input type="number" data-value="100" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>50€</td><td><input type="number" data-value="50" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>20€</td><td><input type="number" data-value="20" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>10€</td><td><input type="number" data-value="10" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>5€</td><td><input type="number" data-value="5" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2" style="text-align:right"><strong data-i18n="subtotal_notes">Subtotal Notas:</strong></td>
+                  <td id="totalNotasSum" class="row-total">0.00€</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Coins Matrix -->
+          <div>
+            <h3 data-i18n="coins_title">Moedas (€)</h3>
+            <table class="cash-table" id="tableMoedas">
+              <thead>
+                <tr>
+                  <th data-i18n="th_denomination">Moeda</th>
+                  <th data-i18n="th_quantity">Qtd</th>
+                  <th data-i18n="th_total">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>2€</td><td><input type="number" data-value="2" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>1€</td><td><input type="number" data-value="1" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>0.50€</td><td><input type="number" data-value="0.5" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>0.20€</td><td><input type="number" data-value="0.2" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>0.10€</td><td><input type="number" data-value="0.1" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>0.05€</td><td><input type="number" data-value="0.05" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>0.02€</td><td><input type="number" data-value="0.02" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+                <tr><td>0.01€</td><td><input type="number" data-value="0.01" class="cash-input" min="0" value="0"></td><td class="row-total">0.00€</td></tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2" style="text-align:right"><strong data-i18n="subtotal_coins">Subtotal Moedas:</strong></td>
+                  <td id="totalMoedasSum" class="row-total">0.00€</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Vales (Vouchers) Table -->
+        <div class="card" style="margin-top:20px;">
+          <h3 data-i18n="vouchers_title">Vales (Vouchers)</h3>
+          <div style="overflow-x: auto;">
+            <table class="dynamic-table" id="tableVales">
+              <thead>
+                <tr>
+                  <th style="width: 110px;" data-i18n="th_value">Valor (€)</th>
+                  <th data-i18n="th_justification">Justificação</th>
+                  <th style="width: 140px;" data-i18n="th_department">Departamento</th>
+                  <th style="width: 140px;" data-i18n="th_responsible">Responsável</th>
+                  <th style="width: 130px;" data-i18n="th_date">Data</th>
+                  <th style="width: 80px;" data-i18n="th_actions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="bodyVales"></tbody>
+              <tfoot>
+                <tr>
+                  <td style="text-align:right; font-weight:600;"><span data-i18n="vouchers_title">Vales (Vouchers)</span>:</td>
+                  <td colspan="5" id="totalValesSum" style="font-weight:bold; color:var(--gold);">0.00€</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <button class="secondary-btn" id="btnAddVale" style="width:auto; margin-top:12px; padding: 10px 18px; font-size:13.5px;" data-i18n="btn_add_voucher">+ Adicionar Vale</button>
+        </div>
+
+        <!-- Paid-outs Table -->
+        <div class="card" style="margin-top:20px;">
+          <h3 data-i18n="paidouts_title">Paid-outs</h3>
+          <div style="overflow-x: auto;">
+            <table class="dynamic-table" id="tablePaidouts">
+              <thead>
+                <tr>
+                  <th style="width: 110px;" data-i18n="th_value">Valor (€)</th>
+                  <th data-i18n="th_justification">Justificação</th>
+                  <th style="width: 120px;" data-i18n="th_room">Quarto</th>
+                  <th style="width: 140px;" data-i18n="th_responsible">Responsável</th>
+                  <th style="width: 130px;" data-i18n="th_date">Data</th>
+                  <th style="width: 80px;" data-i18n="th_actions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="bodyPaidouts"></tbody>
+              <tfoot>
+                <tr>
+                  <td style="text-align:right; font-weight:600;"><span data-i18n="paidouts_title">Paid-outs</span>:</td>
+                  <td colspan="5" id="totalPaidoutsSum" style="font-weight:bold; color:var(--gold);">0.00€</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <button class="secondary-btn" id="btnAddPaidout" style="width:auto; margin-top:12px; padding: 10px 18px; font-size:13.5px;" data-i18n="btn_add_paidout">+ Adicionar Paid-out</button>
+        </div>
+
+        <!-- Totals summary block -->
+        <div class="card" style="margin-top: 24px; text-align: right; padding: 14px 20px;">
+          <span style="font-size: 14.5px; font-weight: 500;"><span data-i18n="total_docs">Total Documentos (Vales + Paid-outs)</span>: <span id="totalDocsSum" style="color: var(--gold); font-weight: bold; font-size:15px; margin-left:8px;">0.00€</span></span>
+        </div>
+
+        <div class="card" style="margin-top:20px; border-left: 4px solid var(--gold); background: rgba(198,166,103,0.03); padding: 20px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; align-items: center;">
+            <div>
+              <p style="margin:0; font-size: 14.5px; font-weight: 500;"><span data-i18n="fixed_cash_fund">Fundo de Caixa Fixo</span>: <strong>750.00€</strong></p>
+              <label for="montanteRecebidoDia" style="font-size: 13.5px; display: block; margin-top: 12px; font-weight: 500;" data-i18n="amount_received_system">Montante recebido dia (Sistema):</label>
+              <input id="montanteRecebidoDia" type="number" step="0.01" value="0.00" class="form-input" style="width: 100%; text-align: right; margin-top:6px; margin-bottom:0; font-size:15px; font-weight:600;">
+            </div>
+            <div style="text-align: right; border-left: 1px solid var(--border); padding-left: 20px;">
+              <p style="font-size: 14px; margin-bottom: 6px; color: var(--muted);"><span data-i18n="grand_total_cash_docs">Total Geral (Espécie + Docs)</span>: <span id="totalGeralCaixa" style="color: var(--text); font-weight: 600;">0.00</span>€</p>
+              <p style="font-size: 15.5px; margin-bottom: 6px; font-weight: 600;"><span data-i18n="calculated_deposit">Depósito do Dia</span>: <span id="depositoDiaCalculado" style="color: var(--gold);">0.00</span><span id="depositoDiaEuro">€</span></p>
+              <p style="font-size: 15.5px; margin:0; font-weight: 600;"><span data-i18n="difference_label">Diferença</span>: <span id="diferencaCaixa">0.00</span></p>
+              <div id="statusCaixaMsg" style="font-weight: bold; margin-top: 8px; font-size: 13.5px; letter-spacing:0.02em;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/caixa.js"></script>
+</body>
+</html>
