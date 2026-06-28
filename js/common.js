@@ -1,4 +1,4 @@
-import { checkAuthStatus, logoutUser } from './auth.js';
+import { checkAuthStatus, logoutUser, checkRole } from './auth.js';
 import { translatePage } from './lang.js';
 
 // Weather Service
@@ -196,9 +196,9 @@ export const SidebarDropdownController = {
         }
       });
 
-      // Expand automatically if current page is checklist.html or caixa.html
+      // Expand automatically if current page is checklist.html, caixa.html, or gerar-report.html
       const path = window.location.pathname;
-      if (path.endsWith('checklist.html') || path.endsWith('caixa.html')) {
+      if (path.endsWith('checklist.html') || path.endsWith('caixa.html') || path.endsWith('gerar-report.html')) {
         menu.classList.add('show');
         btn.classList.add('open');
         btn.setAttribute('aria-expanded', 'true');
@@ -212,13 +212,22 @@ export const SidebarDropdownController = {
           const caixaLink = document.getElementById('nav-caixa');
           if (caixaLink) caixaLink.classList.add('active');
         }
+        if (path.endsWith('gerar-report.html')) {
+          const gerarLink = document.getElementById('nav-gerar-report');
+          if (gerarLink) gerarLink.classList.add('active');
+        }
+      }
+
+      if (path.endsWith('relatorios.html')) {
+        const reportsLink = document.getElementById('nav-reports');
+        if (reportsLink) reportsLink.classList.add('active');
       }
       
       // Close dropdown when clicking outside
       document.addEventListener('click', (e) => {
         if (!btn.contains(e.target) && !menu.contains(e.target)) {
-          // If we are on checklist or caixa pages, do NOT collapse the menu on outside clicks
-          if (path.endsWith('checklist.html') || path.endsWith('caixa.html')) {
+          // If we are on checklist, caixa, or gerar-report pages, do NOT collapse the menu on outside clicks
+          if (path.endsWith('checklist.html') || path.endsWith('caixa.html') || path.endsWith('gerar-report.html')) {
             return;
           }
           menu.classList.remove('show');
@@ -238,6 +247,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const profileEmailEl = document.getElementById('user-profile-email');
     if (profileEmailEl) {
       profileEmailEl.textContent = user.email || 'Utilizador';
+    }
+    
+    // Check role and display Gerar Daily Report if user is Admin
+    const isAdmin = checkRole(user.email);
+    const gerarReportEl = document.getElementById('sidebar-gerar-report-item');
+    if (gerarReportEl) {
+      gerarReportEl.style.display = isAdmin ? 'block' : 'none';
     }
   }
 

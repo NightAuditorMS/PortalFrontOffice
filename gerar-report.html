@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="nav_gerar_report">Gerar Daily Report</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="dashboard">
+    <header class="dashboard-header">
+      <div class="brand">
+        <img src="MythicSanaHotelLogoCor.png" alt="Sana Mythic Hotel" class="brand-logo-img">
+        <h1 data-i18n="header_title">Portal Front Office</h1>
+      </div>
+      <div class="header-controls">
+        <div class="header-left-group">
+          <div class="header-datetime">
+            <span id="current-date-time"></span>
+          </div>
+          <div class="header-weather">
+            <span id="weather-summary" class="weather-text" data-i18n="weather_loading">A carregar previsão...</span>
+          </div>
+        </div>
+        <div class="header-divider"></div>
+        <div class="header-right-group">
+          <div class="header-profile">
+            <span id="user-profile-email" class="profile-email">A carregar perfil...</span>
+            <button class="logout-button-styled" id="logout-button" aria-label="Sair" data-i18n="logout_btn">Sair</button>
+          </div>
+          <div class="duty-manager-card">
+            <span class="duty-manager-label" data-i18n="duty_manager">Duty Manager:</span>
+            <span class="duty-manager-value" data-i18n="duty_manager_value">Tarde / Noite</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <aside class="dashboard-sidebar">
+      <nav>
+        <ul>
+          <li><a href="index.html" id="nav-dashboard" data-i18n="nav_dashboard">Dashboard</a></li>
+          <li><a href="concierge.html" id="nav-concierge" data-i18n="nav_concierge">Concierge Virtual</a></li>
+          <li class="sidebar-dropdown-container">
+            <button class="sidebar-dropdown-btn" id="nav-rececao-btn" aria-haspopup="true" aria-expanded="false">
+              <span data-i18n="nav_rececao">Receção</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            <ul class="sidebar-dropdown-menu" id="rececao-menu">
+              <li><a href="checklist.html" id="nav-checklist" data-i18n="nav_checklist">Checklist de Turno</a></li>
+              <li><a href="caixa.html" id="nav-caixa" data-i18n="nav_caixa">Contagem de Caixa</a></li>
+              <li id="sidebar-gerar-report-item" style="display: none;"><a href="gerar-report.html" id="nav-gerar-report" class="active" data-i18n="nav_gerar_report">Gerar Daily Report</a></li>
+            </ul>
+          </li>
+          <li><a href="relatorios.html" id="nav-reports" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="footer-controls">
+          <button class="lang-toggle-btn" id="lang-toggle" aria-label="Alterar idioma">PT / EN</button>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema">🌙</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <form id="formDailyReport" class="card" onsubmit="return false;">
+        <h2 data-i18n="report_title_label">Gerar Relatório Diário</h2>
+        <div class="section-note" data-i18n="report_desc_label">Preencha as métricas operacionais e financeiras do dia para gerar o PDF oficial do hotel e enviá-lo ao SharePoint.</div>
+
+        <!-- Section 1: Performance KPIs -->
+        <div class="card" style="margin-top:20px; border-left:4px solid var(--gold);">
+          <h3 data-i18n="section_kpis" style="color:var(--gold); margin-bottom: 16px;">Métricas Operacionais e KPIs</h3>
+          <div class="meta-grid">
+            <div>
+              <label for="reportDate" style="font-weight:600;" data-i18n="field_work_date">Data Operacional *</label>
+              <input type="date" id="reportDate" class="form-input" required>
+            </div>
+            <div>
+              <label for="occupancy" style="font-weight:600;" data-i18n="kpi_occupancy">Percentual Ocupação *</label>
+              <input type="number" step="0.1" id="occupancy" class="form-input" placeholder="ex: 82.5" min="0" max="100" required>
+            </div>
+            <div>
+              <label for="inHouse" style="font-weight:600;" data-i18n="kpi_inhouse">Hóspedes In-House *</label>
+              <input type="number" id="inHouse" class="form-input" placeholder="ex: 145" min="0" required>
+            </div>
+            <div>
+              <label for="arrivals" style="font-weight:600;" data-i18n="kpi_arrivals">Chegadas do Dia *</label>
+              <input type="number" id="arrivals" class="form-input" placeholder="ex: 45" min="0" required>
+            </div>
+            <div>
+              <label for="departures" style="font-weight:600;" data-i18n="kpi_departures">Saídas do Dia *</label>
+              <input type="number" id="departures" class="form-input" placeholder="ex: 38" min="0" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Financial Metrics -->
+        <div class="card" style="margin-top:20px;">
+          <h3 data-i18n="section_financials" style="color:var(--gold); margin-bottom: 16px;">Receitas e Tarifas Médias</h3>
+          <div class="meta-grid">
+            <div>
+              <label for="totalRevenue" style="font-weight:600;">Total Revenue (€) *</label>
+              <input type="number" step="0.01" id="totalRevenue" class="form-input" placeholder="ex: 12450.50" min="0" required>
+            </div>
+            <div>
+              <label for="roomServiceRevenue" style="font-weight:600;">Room Service (€)</label>
+              <input type="number" step="0.01" id="roomServiceRevenue" class="form-input" placeholder="ex: 450.00" min="0">
+            </div>
+            <div>
+              <label for="restaurantRevenue" style="font-weight:600;">Restaurant (€)</label>
+              <input type="number" step="0.01" id="restaurantRevenue" class="form-input" placeholder="ex: 2800.00" min="0">
+            </div>
+            <div>
+              <label for="spaRevenue" style="font-weight:600;">Spa (€)</label>
+              <input type="number" step="0.01" id="spaRevenue" class="form-input" placeholder="ex: 850.00" min="0">
+            </div>
+            <div>
+              <label for="averageRate" style="font-weight:600;">Average Rate / ADR (€)</label>
+              <input type="number" step="0.01" id="averageRate" class="form-input" placeholder="ex: 125.00" min="0">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: VIP Arrivals -->
+        <div class="card" style="margin-top:20px;">
+          <h3 data-i18n="section_vips" style="color:var(--gold); margin-bottom: 12px;">Chegadas VIP</h3>
+          <div style="overflow-x: auto;">
+            <table class="dynamic-table" id="tableVips">
+              <thead>
+                <tr>
+                  <th style="width: 120px;" data-i18n="th_room">Quarto</th>
+                  <th data-i18n="lbl_name">Nome</th>
+                  <th style="width: 100px;">Pax</th>
+                  <th style="width: 140px;" data-i18n="kpi_arrivals">Chegada</th>
+                  <th style="width: 140px;" data-i18n="kpi_departures">Partida</th>
+                  <th style="width: 80px;" data-i18n="th_actions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="bodyVips"></tbody>
+            </table>
+          </div>
+          <button type="button" class="secondary-btn" id="btnAddVip" style="width:auto; margin-top:12px; padding: 10px 18px; font-size:13.5px;" data-i18n="btn_add_vip">+ Adicionar VIP</button>
+        </div>
+
+        <!-- Section 4: Daily Events -->
+        <div class="card" style="margin-top:20px;">
+          <h3 data-i18n="section_events" style="color:var(--gold); margin-bottom: 12px;">Eventos Diários</h3>
+          <div style="overflow-x: auto;">
+            <table class="dynamic-table" id="tableEvents">
+              <thead>
+                <tr>
+                  <th style="width: 140px;" data-i18n="th_date">Hora</th>
+                  <th data-i18n="th_justification">Descrição</th>
+                  <th style="width: 200px;" data-i18n="th_department">Localização</th>
+                  <th style="width: 80px;" data-i18n="th_actions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="bodyEvents"></tbody>
+            </table>
+          </div>
+          <button type="button" class="secondary-btn" id="btnAddEvent" style="width:auto; margin-top:12px; padding: 10px 18px; font-size:13.5px;" data-i18n="btn_add_event">+ Adicionar Evento</button>
+        </div>
+
+        <!-- Section 5: Out of Service Rooms -->
+        <div class="card" style="margin-top:20px;">
+          <h3 data-i18n="section_oos" style="color:var(--gold); margin-bottom: 12px;">Quartos Out of Service (OOS)</h3>
+          <div style="overflow-x: auto;">
+            <table class="dynamic-table" id="tableOos">
+              <thead>
+                <tr>
+                  <th style="width: 150px;" data-i18n="th_room">Quarto</th>
+                  <th data-i18n="th_justification">Motivo</th>
+                  <th style="width: 80px;" data-i18n="th_actions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="bodyOos"></tbody>
+            </table>
+          </div>
+          <button type="button" class="secondary-btn" id="btnAddOos" style="width:auto; margin-top:12px; padding: 10px 18px; font-size:13.5px;" data-i18n="btn_add_oos">+ Adicionar Quarto OOS</button>
+        </div>
+
+        <div style="margin-top:24px; text-align:right;">
+          <button type="submit" class="final-btn" id="btnSubmitReport" data-i18n="btn_submit_report">Gerar e Submeter Relatório</button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script type="module" src="js/gerar-report.js"></script>
+</body>
+</html>

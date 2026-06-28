@@ -18,3 +18,21 @@ export function saveProgress(dataToMerge) {
     console.error('Error saving progress:', e);
   }
 }
+
+export function saveReportToHistory(name, type, pdfBase64, date) {
+  try {
+    const key = 'portal-historical-reports';
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    const newReport = {
+      id: 'stored-' + Date.now(),
+      date: date || new Date().toISOString().split('T')[0],
+      name: name,
+      type: type,
+      pdfUrl: `data:application/pdf;base64,${pdfBase64}`
+    };
+    list.unshift(newReport);
+    localStorage.setItem(key, JSON.stringify(list));
+  } catch (e) {
+    console.error('Error saving report to history:', e);
+  }
+}

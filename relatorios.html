@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Front Office</title>
+  <title data-i18n="nav_reports">Arquivo de Relatórios</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div class="dashboard">
@@ -14,7 +15,6 @@
         <h1 data-i18n="header_title">Portal Front Office</h1>
       </div>
       <div class="header-controls">
-        <!-- Left Group: DateTime + Weather Forecast -->
         <div class="header-left-group">
           <div class="header-datetime">
             <span id="current-date-time"></span>
@@ -23,10 +23,7 @@
             <span id="weather-summary" class="weather-text" data-i18n="weather_loading">A carregar previsão...</span>
           </div>
         </div>
-
         <div class="header-divider"></div>
-
-        <!-- Right Group: Profile + Duty Manager -->
         <div class="header-right-group">
           <div class="header-profile">
             <span id="user-profile-email" class="profile-email">A carregar perfil...</span>
@@ -37,17 +34,13 @@
             <span class="duty-manager-value" data-i18n="duty_manager_value">Tarde / Noite</span>
           </div>
         </div>
-
-        <!-- Compatibility fallbacks for JS logic -->
-        <span id="greeting-text" style="display: none;"></span>
-        <span id="header-date" style="display: none;"></span>
       </div>
     </header>
 
     <aside class="dashboard-sidebar">
       <nav>
         <ul>
-          <li><a href="index.html" class="active" id="nav-dashboard" data-i18n="nav_dashboard">Dashboard</a></li>
+          <li><a href="index.html" id="nav-dashboard" data-i18n="nav_dashboard">Dashboard</a></li>
           <li><a href="concierge.html" id="nav-concierge" data-i18n="nav_concierge">Concierge Virtual</a></li>
           <li class="sidebar-dropdown-container">
             <button class="sidebar-dropdown-btn" id="nav-rececao-btn" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +53,7 @@
               <li id="sidebar-gerar-report-item" style="display: none;"><a href="gerar-report.html" id="nav-gerar-report" data-i18n="nav_gerar_report">Gerar Daily Report</a></li>
             </ul>
           </li>
-          <li><a href="relatorios.html" id="nav-reports" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
+          <li><a href="relatorios.html" id="nav-reports" class="active" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
         </ul>
       </nav>
       <div class="sidebar-footer">
@@ -72,48 +65,58 @@
     </aside>
 
     <main class="dashboard-main">
-      <!-- Section 1: Hotel Section (KPIs and 4-Column Layout) -->
-      <section class="hotel-section" id="hotel-section-container">
-        <p class="loading" data-i18n="weather_loading">A carregar secção hotel...</p>
-      </section>
-
-      <!-- Section 2: Stats & Budget Section -->
-      <section class="stats-budget-section" id="stats-budget-container">
-        <p class="loading" data-i18n="weather_loading">A carregar estatísticas e budget...</p>
-      </section>
-
-      <!-- Section 3: Secondary Content Grid -->
-      <section class="secondary-section">
-        <div class="secondary-grid">
-          <div class="card" id="noticias-section">
-            <h2 data-i18n="noticias_title">Notícias</h2>
-            <div id="noticias-container" class="content-container">
-              <p class="loading" data-i18n="loading_news">A carregar notícias...</p>
+      <section class="card">
+        <h2 data-i18n="nav_reports">Arquivo de Relatórios</h2>
+        
+        <!-- Filter Bar -->
+        <div class="card" style="margin-top:20px; background: rgba(255, 255, 255, 0.01); border-color: var(--border);">
+          <div class="meta-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+            <div>
+              <label for="reportsSearch" style="font-weight:600;" data-i18n="lbl_search">Pesquisar</label>
+              <input type="text" id="reportsSearch" class="form-input" placeholder="Pesquisar por nome..." style="margin-bottom:0;">
+            </div>
+            <div>
+              <label for="reportsType" style="font-weight:600;" data-i18n="lbl_type">Tipo</label>
+              <select id="reportsType" class="form-select" style="margin-bottom:0;">
+                <option value="all" data-i18n="lbl_all">Todos</option>
+                <option value="Daily Report">Daily Report</option>
+                <option value="Checklist">Checklist</option>
+                <option value="Contagem de Caixa">Contagem de Caixa</option>
+              </select>
+            </div>
+            <div>
+              <label for="reportsFrom" style="font-weight:600;" data-i18n="lbl_from">De</label>
+              <input type="date" id="reportsFrom" class="form-input" style="margin-bottom:0;">
+            </div>
+            <div>
+              <label for="reportsTo" style="font-weight:600;" data-i18n="lbl_to">Até</label>
+              <input type="date" id="reportsTo" class="form-input" style="margin-bottom:0;">
             </div>
           </div>
+        </div>
 
-          <div class="card" id="eventos-section">
-            <h2 data-i18n="eventos_title">Eventos</h2>
-            <div id="eventos-container" class="content-container">
-              <p class="muted" data-i18n="no_events">Sem eventos agendados.</p>
-            </div>
-          </div>
-
-          <div class="card" id="links-section">
-            <h2 data-i18n="links_title">Links Úteis</h2>
-            <div id="links-container" class="content-container">
-              <ul class="link-list">
-                <li><a href="checklist.html" data-i18n="nav_checklist">Checklist de Turno</a></li>
-                <li><a href="#">Sistema MySana</a></li>
-                <li><a href="#">Intranet Corporativa</a></li>
-              </ul>
-            </div>
-          </div>
+        <!-- Reports list grid -->
+        <div class="card" style="margin-top:20px; padding:0; overflow-x:auto;">
+          <table class="dynamic-table" id="tableReports" style="margin:0;">
+            <thead>
+              <tr>
+                <th style="width: 140px; padding-left:20px;" data-i18n="lbl_date">Data</th>
+                <th data-i18n="lbl_name">Nome do Relatório</th>
+                <th style="width: 180px;" data-i18n="lbl_type">Tipo</th>
+                <th style="width: 220px; padding-right:20px; text-align:right;" data-i18n="lbl_actions">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="bodyReports">
+              <tr>
+                <td colspan="4" style="text-align:center; padding: 30px; color: var(--muted);" data-i18n="weather_loading">A carregar relatórios...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
     </main>
   </div>
 
-  <script type="module" src="js/portal.js"></script>
+  <script type="module" src="js/relatorios.js"></script>
 </body>
 </html>

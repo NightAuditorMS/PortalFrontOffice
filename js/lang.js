@@ -194,7 +194,32 @@ export const translations = {
     "TOTAL GERAL": "TOTAL GERAL",
     "ALOJAMENTO": "ALOJAMENTO",
     "F&B": "F&B",
-    "DIVERSOS": "DIVERSOS"
+    "DIVERSOS": "DIVERSOS",
+    
+    // New Report Generator & Archive keys
+    "nav_gerar_report": "Gerar Daily Report",
+    "nav_reports": "Arquivo de Relatórios",
+    "report_title_label": "Gerar Relatório Diário",
+    "report_desc_label": "Preencha as métricas operacionais e financeiras do dia para gerar o PDF oficial do hotel e enviá-lo ao SharePoint.",
+    "section_kpis": "Métricas Operacionais e KPIs",
+    "section_financials": "Receitas e Tarifas Médias",
+    "section_vips": "Chegadas VIP",
+    "section_events": "Eventos Diários",
+    "section_oos": "Quartos Fora de Serviço (OOS)",
+    "btn_add_vip": "+ Adicionar VIP",
+    "btn_add_event": "+ Adicionar Evento",
+    "btn_add_oos": "+ Adicionar Quarto OOS",
+    "btn_submit_report": "Gerar e Submeter Relatório",
+    "lbl_search": "Pesquisar:",
+    "lbl_from": "De:",
+    "lbl_to": "Até:",
+    "lbl_type": "Tipo:",
+    "lbl_all": "Todos",
+    "lbl_date": "Data",
+    "lbl_name": "Nome",
+    "lbl_actions": "Ações",
+    "btn_view_pdf": "Ver / Download PDF",
+    "msg_unauthorized_admin": "Acesso restrito. Redirecionando para a página principal..."
   },
   en: {
     // Sidebar/Navigation
@@ -391,7 +416,32 @@ export const translations = {
     "TOTAL GERAL": "GRAND TOTAL",
     "ALOJAMENTO": "ACCOMMODATION",
     "F&B": "F&B",
-    "DIVERSOS": "MISCELLANEOUS"
+    "DIVERSOS": "MISCELLANEOUS",
+    
+    // New Report Generator & Archive keys
+    "nav_gerar_report": "Generate Daily Report",
+    "nav_reports": "Reports Archive",
+    "report_title_label": "Generate Daily Report",
+    "report_desc_label": "Fill in the operational and financial metrics for the day to generate the official hotel PDF and send it to SharePoint.",
+    "section_kpis": "Operational Metrics & KPIs",
+    "section_financials": "Revenues & Average Rates",
+    "section_vips": "VIP Arrivals",
+    "section_events": "Daily Events",
+    "section_oos": "Out of Service Rooms (OOS)",
+    "btn_add_vip": "+ Add VIP",
+    "btn_add_event": "+ Add Event",
+    "btn_add_oos": "+ Add OOS Room",
+    "btn_submit_report": "Generate & Submit Report",
+    "lbl_search": "Search:",
+    "lbl_from": "From:",
+    "lbl_to": "To:",
+    "lbl_type": "Type:",
+    "lbl_all": "All",
+    "lbl_date": "Date",
+    "lbl_name": "Name",
+    "lbl_actions": "Actions",
+    "btn_view_pdf": "View / Download PDF",
+    "msg_unauthorized_admin": "Restricted access. Redirecting to home page..."
   }
 };
 

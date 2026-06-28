@@ -1,6 +1,6 @@
 import './common.js';
 import { getTranslation } from './lang.js';
-import { getSavedProgress, saveProgress, storageKey } from './storage.js';
+import { getSavedProgress, saveProgress, storageKey, saveReportToHistory } from './storage.js';
 
 // Selectors helper
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -498,9 +498,12 @@ async function gerarPDF() {
   
   doc.save(`${safe}.pdf`);
 
+  const pdfBase64 = doc.output('datauristring').split(',')[1];
+  saveReportToHistory(`Checklist ${shiftText} - ${auditor}`, 'Checklist', pdfBase64, data);
+
   // SharePoint POST Integration (webhookUrl Power Automate block)
   try {
-    const pdfBase64 = doc.output('datauristring').split(',')[1];
+    // Reuse pdfBase64 variable
     const payload = {
       dataHora: new Date().toLocaleString('pt-PT'),
       turno: turno,
