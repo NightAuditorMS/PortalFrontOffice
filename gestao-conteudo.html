@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="nav_reports">Arquivo de Relatórios</title>
+  <title data-i18n="cms_title">Gestão de Conteúdo</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div class="dashboard">
@@ -34,6 +33,8 @@
             <span class="duty-manager-value" data-i18n="duty_manager_value">Tarde / Noite</span>
           </div>
         </div>
+        <span id="greeting-text" style="display: none;"></span>
+        <span id="header-date" style="display: none;"></span>
       </div>
     </header>
 
@@ -59,7 +60,7 @@
               <span class="dropdown-arrow">▼</span>
             </button>
             <ul class="sidebar-dropdown-menu" id="arquivo-menu">
-              <li><a href="relatorios.html" id="nav-reports" class="active" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
+              <li><a href="relatorios.html" id="nav-reports" data-i18n="nav_reports">Arquivo de Relatórios</a></li>
             </ul>
           </li>
           <li class="sidebar-dropdown-container" id="sidebar-gestao-container" style="display: none;">
@@ -68,7 +69,7 @@
               <span class="dropdown-arrow">▼</span>
             </button>
             <ul class="sidebar-dropdown-menu" id="gestao-menu">
-              <li><a href="gestao-conteudo.html" id="nav-gestao-conteudo" data-i18n="nav_gestao_conteudo">Gestão de Conteúdo</a></li>
+              <li><a href="gestao-conteudo.html" id="nav-gestao-conteudo" class="active" data-i18n="nav_gestao_conteudo">Gestão de Conteúdo</a></li>
             </ul>
           </li>
         </ul>
@@ -83,57 +84,36 @@
 
     <main class="dashboard-main">
       <section class="card">
-        <h2 data-i18n="nav_reports">Arquivo de Relatórios</h2>
+        <h2 data-i18n="cms_title">Gestão de Conteúdo</h2>
+        <div class="section-note" data-i18n="cms_subtitle">Crie e publique novos conteúdos, alertas ou tarefas no portal.</div>
         
-        <!-- Filter Bar -->
-        <div class="card" style="margin-top:20px; background: rgba(255, 255, 255, 0.01); border-color: var(--border);">
-          <div class="meta-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
-            <div>
-              <label for="reportsSearch" style="font-weight:600;" data-i18n="lbl_search">Pesquisar</label>
-              <input type="text" id="reportsSearch" class="form-input" data-i18n="placeholder_search" placeholder="Pesquisar por nome..." style="margin-bottom:0;">
-            </div>
-            <div>
-              <label for="reportsType" style="font-weight:600;" data-i18n="lbl_type">Tipo</label>
-              <select id="reportsType" class="form-select" style="margin-bottom:0;">
-                <option value="all" data-i18n="lbl_all">Todos</option>
-                <option value="Daily Report" data-i18n="type_daily_report">Daily Report</option>
-                <option value="Checklist" data-i18n="type_checklist">Checklist</option>
-                <option value="Contagem de Caixa" data-i18n="type_caixa">Contagem de Caixa</option>
-              </select>
-            </div>
-            <div>
-              <label for="reportsFrom" style="font-weight:600;" data-i18n="lbl_from">De</label>
-              <input type="date" id="reportsFrom" class="form-input" style="margin-bottom:0;">
-            </div>
-            <div>
-              <label for="reportsTo" style="font-weight:600;" data-i18n="lbl_to">Até</label>
-              <input type="date" id="reportsTo" class="form-input" style="margin-bottom:0;">
-            </div>
-          </div>
+        <div id="cms-alert-box" class="cms-alert"></div>
+
+        <div class="cms-select-group">
+          <label for="cms-publish-select" data-i18n="lbl_publish_type">O que deseja publicar?</label>
+          <select id="cms-publish-select" class="cms-select">
+            <option value="" disabled selected data-i18n="select_placeholder">Selecione uma categoria...</option>
+            <option value="noticias">Notícias</option>
+            <option value="eventos">Eventos</option>
+            <option value="grupos">Grupos</option>
+            <option value="vip">VIP Alerts</option>
+            <option value="transferes">Transferes</option>
+            <option value="wakeup">Wake-Up Calls</option>
+            <option value="taxis">Táxis</option>
+            <option value="breakfast">Pedidos de Breakfast Boxes</option>
+          </select>
         </div>
 
-        <!-- Reports list grid -->
-        <div class="card" style="margin-top:20px; padding:0; overflow-x:auto;">
-          <table class="dynamic-table" id="tableReports" style="margin:0;">
-            <thead>
-              <tr>
-                <th style="width: 140px; padding-left:20px;" data-i18n="lbl_date">Data</th>
-                <th data-i18n="lbl_name">Nome do Relatório</th>
-                <th style="width: 180px;" data-i18n="lbl_type">Tipo</th>
-                <th style="width: 220px; padding-right:20px; text-align:right;" data-i18n="lbl_actions">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="bodyReports">
-              <tr>
-                <td colspan="4" style="text-align:center; padding: 30px; color: var(--muted);" data-i18n="weather_loading">A carregar relatórios...</td>
-              </tr>
-            </tbody>
-          </table>
+        <div id="cms-form-container">
+          <!-- Dynamic forms will be injected here by Javascript -->
+          <div class="muted" style="text-align: center; padding: 40px 0; border: 1px dashed var(--border); border-radius: 8px;">
+            Selecione uma categoria acima para carregar o respetivo formulário de publicação.
+          </div>
         </div>
       </section>
     </main>
   </div>
 
-  <script type="module" src="js/relatorios.js"></script>
+  <script type="module" src="js/gestao-conteudo.js"></script>
 </body>
 </html>

@@ -1743,3 +1743,325 @@ li.optional-item {
   justify-content: center;
 }
 
+/* ==========================================================================
+   Content Management System & Notification Center Styles
+   ========================================================================== */
+
+/* Notification Bar */
+.notification-bar {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 16px 24px !important;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.notification-bar-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-right: 1px solid var(--border-strong);
+  padding-right: 20px;
+  margin: 0;
+}
+
+.notification-icons-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+}
+
+.notification-icon-wrapper {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-icon-wrapper:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  box-shadow: var(--gold-glow);
+}
+
+.notification-icon-wrapper svg,
+.notification-icon-wrapper span {
+  font-size: 18px;
+  color: var(--text);
+  transition: color 0.3s ease;
+}
+
+.notification-icon-wrapper:hover svg,
+.notification-icon-wrapper:hover span {
+  color: var(--gold-2);
+}
+
+/* Notification Badge (Subtle but noticeable corporate red) */
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background-color: #ff3b30;
+  border: 2px solid var(--surface-2);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 59, 48, 0.6);
+}
+
+/* Premium Notification Pop-up Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-container {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 550px;
+  max-height: 80vh;
+  box-shadow: var(--gold-glow), 0 24px 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.modal-overlay.show .modal-container {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--gold);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.modal-close-btn:hover {
+  color: var(--gold);
+}
+
+.modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notification-item-card {
+  background: var(--surface-2);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  transition: all 0.2s ease;
+}
+
+.notification-item-card:hover {
+  border-color: var(--border-strong);
+  transform: translateX(4px);
+}
+
+.notification-item-card h4 {
+  margin: 0 0 6px 0;
+  color: var(--text);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.notification-item-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.notification-item-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+}
+
+.notification-read-more {
+  font-size: 12px;
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.notification-read-more:hover {
+  color: var(--gold-2);
+  text-decoration: underline;
+}
+
+/* CMS Page Forms */
+.cms-select-group {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cms-select-group label {
+  font-weight: 600;
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.cms-select {
+  padding: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cms-select:focus {
+  border-color: var(--gold);
+  box-shadow: var(--gold-glow);
+}
+
+.cms-form-card {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  display: none;
+}
+
+.cms-form-card.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cms-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.cms-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.cms-input-group label {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.cms-input,
+.cms-textarea {
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.cms-input:focus,
+.cms-textarea:focus {
+  border-color: var(--gold);
+  background: var(--surface);
+  box-shadow: var(--gold-glow);
+}
+
+.cms-alert {
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  display: none;
+  font-weight: 500;
+  animation: phaseOpen 0.3s ease;
+}
+
+.cms-alert-success {
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  color: #2ecc71;
+}
+
+.cms-alert-error {
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  color: #e74c3c;
+}
+
+

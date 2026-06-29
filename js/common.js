@@ -133,6 +133,13 @@ export const LanguageController = {
         activeSpan.textContent = lang === 'en' ? 'Archive' : 'Arquivo';
       }
     }
+    const gestaoBtn = document.getElementById('nav-gestao-btn');
+    if (gestaoBtn) {
+      const activeSpan = gestaoBtn.querySelector('span:first-child');
+      if (activeSpan) {
+        activeSpan.textContent = lang === 'en' ? 'Administration' : 'Administração';
+      }
+    }
     
     // Trigger localized custom event so specific page renderers can redraw
     const event = new CustomEvent('languageChanged', { detail: { lang } });
@@ -233,6 +240,18 @@ export const SidebarDropdownController = {
       }
     }
 
+    if (path.endsWith('gestao-conteudo.html')) {
+      const btn = document.getElementById('nav-gestao-btn');
+      const menu = document.getElementById('gestao-menu');
+      if (btn && menu) {
+        menu.classList.add('show');
+        btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      const gestaoLink = document.getElementById('nav-gestao-conteudo');
+      if (gestaoLink) gestaoLink.classList.add('active');
+    }
+
     if (path.endsWith('relatorios.html')) {
       const btn = document.getElementById('nav-arquivo-btn');
       const menu = document.getElementById('arquivo-menu');
@@ -284,6 +303,10 @@ function updateHeaderUI(email) {
   const gerarReportEl = document.getElementById('sidebar-gerar-report-item');
   if (gerarReportEl) {
     gerarReportEl.style.display = isAdmin ? 'block' : 'none';
+  }
+  const adminGestaoEl = document.getElementById('sidebar-gestao-container');
+  if (adminGestaoEl) {
+    adminGestaoEl.style.display = isAdmin ? 'block' : 'none';
   }
 }
 

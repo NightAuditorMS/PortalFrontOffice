@@ -224,7 +224,18 @@ export const translations = {
     "msg_unauthorized_admin": "Acesso restrito. Redirecionando para a página principal...",
     "msg_submit_success": "✅ SUCESSO! Relatório diário submetido ao SharePoint via Power Automate!",
     "msg_submit_error": "⚠️ O SharePoint recusou os dados. Código de erro: ",
-    "msg_connection_error": "❌ ERRO DE CONEXÃO: "
+    "msg_connection_error": "❌ ERRO DE CONEXÃO: ",
+    "nav_gestao": "Administração",
+    "nav_gestao_conteudo": "Gestão de Conteúdo",
+    "cms_title": "Gestão de Conteúdo",
+    "cms_subtitle": "Crie e publique novos conteúdos, alertas ou tarefas no portal.",
+    "lbl_publish_type": "O que deseja publicar?",
+    "btn_publish": "Publicar Conteúdo",
+    "msg_publish_success": "✅ SUCESSO! Conteúdo publicado com sucesso e disponível no portal!",
+    "msg_fill_fields": "Por favor, preencha todos os campos obrigatórios.",
+    "lbl_title": "Título",
+    "lbl_description": "Descrição / Notas",
+    "lbl_author": "Autor / Auditor"
   },
   en: {
     // Sidebar/Navigation
@@ -451,7 +462,18 @@ export const translations = {
     "msg_unauthorized_admin": "Restricted access. Redirecting to home page...",
     "msg_submit_success": "✅ SUCCESS! Daily report submitted to SharePoint via Power Automate!",
     "msg_submit_error": "⚠️ SharePoint rejected the data. Error code: ",
-    "msg_connection_error": "❌ CONNECTION ERROR: "
+    "msg_connection_error": "❌ CONNECTION ERROR: ",
+    "nav_gestao": "Administration",
+    "nav_gestao_conteudo": "Content Management",
+    "cms_title": "Content Management",
+    "cms_subtitle": "Create and publish new content, alerts, or tasks to the portal.",
+    "lbl_publish_type": "What do you want to publish?",
+    "btn_publish": "Publish Content",
+    "msg_publish_success": "✅ SUCCESS! Content successfully published and available on the portal!",
+    "msg_fill_fields": "Please fill in all mandatory fields.",
+    "lbl_title": "Title",
+    "lbl_description": "Description / Notes",
+    "lbl_author": "Author / Auditor"
   }
 };
 
