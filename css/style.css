@@ -1167,7 +1167,14 @@ body.login-page {
 
 .phase-btn:hover {
   background: var(--blue-2);
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+  box-shadow: var(--gold-glow), 0 4px 15px rgba(198, 166, 103, 0.25);
+  border-color: var(--gold) !important;
+  transform: translateY(-1px);
+}
+
+.phase-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 0 8px rgba(198, 166, 103, 0.4);
 }
 
 .phase-btn:hover::after {
@@ -1177,8 +1184,9 @@ body.login-page {
   left: -100%;
   width: 200%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(198, 166, 103, 0.22), transparent);
+  background: linear-gradient(90deg, transparent, rgba(216, 184, 109, 0.15), rgba(198, 166, 103, 0.45), rgba(216, 184, 109, 0.15), transparent);
   animation: shine .8s linear;
+  pointer-events: none;
 }
 
 @keyframes shine {
@@ -1671,8 +1679,7 @@ li.optional-item {
   color: var(--muted);
 }
 
-.sidebar-dropdown-btn.open .dropdown-arrow {
-  transform: rotate(180deg);
+.sidebar-dropdown-container.active-dropdown .dropdown-arrow {
   color: var(--gold);
 }
 
@@ -1680,12 +1687,10 @@ li.optional-item {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(0, 0, 0, 0.15);
-}
-
-.sidebar-dropdown-menu.show {
-  display: block;
 }
 
 .sidebar-dropdown-menu a {
@@ -2062,6 +2067,42 @@ li.optional-item {
   background: rgba(231, 76, 60, 0.12);
   border: 1px solid rgba(231, 76, 60, 0.3);
   color: #e74c3c;
+}
+
+/* ==========================================================================
+   Luxury Golden Shine Hover & Click Animation for Buttons
+   ========================================================================== */
+.final-btn, .pdf-btn, .secondary-btn, .primary-btn, .logout-button-styled, .lang-toggle-btn, .theme-toggle, #btn-publicar {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#btn-publicar {
+  border: 1px solid transparent !important;
+}
+
+.final-btn:hover, .pdf-btn:hover, .secondary-btn:hover, .primary-btn:hover, .logout-button-styled:hover, .lang-toggle-btn:hover, .theme-toggle:hover, #btn-publicar:hover {
+  box-shadow: var(--gold-glow), 0 4px 15px rgba(198, 166, 103, 0.25) !important;
+  border-color: var(--gold) !important;
+  transform: translateY(-1px);
+}
+
+.final-btn:active, .pdf-btn:active, .secondary-btn:active, .primary-btn:active, .logout-button-styled:active, .lang-toggle-btn:active, .theme-toggle:active, #btn-publicar:active {
+  transform: translateY(1px);
+  box-shadow: 0 0 8px rgba(198, 166, 103, 0.4) !important;
+}
+
+.final-btn:hover::after, .pdf-btn:hover::after, .secondary-btn:hover::after, .primary-btn:hover::after, .logout-button-styled:hover::after, .lang-toggle-btn:hover::after, .theme-toggle:hover::after, #btn-publicar:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(216, 184, 109, 0.15), rgba(198, 166, 103, 0.45), rgba(216, 184, 109, 0.15), transparent);
+  animation: shine .8s linear;
+  pointer-events: none;
 }
 
 

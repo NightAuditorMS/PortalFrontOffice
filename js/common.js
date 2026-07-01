@@ -118,29 +118,6 @@ export const LanguageController = {
     // Update weather display with the new language
     this.updateWeatherDisplay(lang);
     
-    // Update active dropdown item text
-    const dropdownBtn = document.getElementById('nav-rececao-btn');
-    if (dropdownBtn) {
-      const activeSpan = dropdownBtn.querySelector('span:first-child');
-      if (activeSpan) {
-        activeSpan.textContent = lang === 'en' ? 'Reception' : 'Receção';
-      }
-    }
-    const archiveBtn = document.getElementById('nav-arquivo-btn');
-    if (archiveBtn) {
-      const activeSpan = archiveBtn.querySelector('span:first-child');
-      if (activeSpan) {
-        activeSpan.textContent = lang === 'en' ? 'Archive' : 'Arquivo';
-      }
-    }
-    const gestaoBtn = document.getElementById('nav-gestao-btn');
-    if (gestaoBtn) {
-      const activeSpan = gestaoBtn.querySelector('span:first-child');
-      if (activeSpan) {
-        activeSpan.textContent = lang === 'en' ? 'Administration' : 'Administração';
-      }
-    }
-    
     // Trigger localized custom event so specific page renderers can redraw
     const event = new CustomEvent('languageChanged', { detail: { lang } });
     document.dispatchEvent(event);
@@ -192,97 +169,80 @@ export const ClockController = {
 // Sidebar Dropdown Controller
 export const SidebarDropdownController = {
   init() {
+    // 1. SELECT ALL DROPDOWN BUTTONS IN SIDEBAR
     const dropdownBtns = document.querySelectorAll('.sidebar-dropdown-btn');
-    const path = window.location.pathname;
-    
+
     dropdownBtns.forEach(btn => {
-      const menu = btn.nextElementSibling;
-      if (menu && menu.classList.contains('sidebar-dropdown-menu')) {
-        // Toggle dropdown open/close on click
         btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const open = menu.classList.contains('show');
-          if (open) {
-            menu.classList.remove('show');
-            btn.classList.remove('open');
-            btn.setAttribute('aria-expanded', 'false');
-          } else {
-            menu.classList.add('show');
-            btn.classList.add('open');
-            btn.setAttribute('aria-expanded', 'true');
-          }
+            e.preventDefault();
+            const container = btn.closest('.sidebar-dropdown-container');
+            const menu = container.querySelector('.sidebar-dropdown-menu');
+            const arrow = btn.querySelector('.dropdown-arrow');
+            
+            // Check if this menu is already open
+            const isOpen = container.classList.contains('active-dropdown');
+
+            // Close all other open dropdowns first (Accordion behavior)
+            document.querySelectorAll('.sidebar-dropdown-container').forEach(otherContainer => {
+                if (otherContainer !== container) {
+                    otherContainer.classList.remove('active-dropdown');
+                    const otherMenu = otherContainer.querySelector('.sidebar-dropdown-menu');
+                    const otherBtn = otherContainer.querySelector('.sidebar-dropdown-btn');
+                    const otherArrow = otherBtn.querySelector('.dropdown-arrow');
+                    if (otherMenu) otherMenu.style.maxHeight = null;
+                    if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+                    if (otherArrow) otherArrow.style.transform = 'rotate(0deg)';
+                }
+            });
+
+            // Toggle current dropdown
+            if (isOpen) {
+                container.classList.remove('active-dropdown');
+                menu.style.maxHeight = null;
+                btn.setAttribute('aria-expanded', 'false');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            } else {
+                container.classList.add('active-dropdown');
+                // Smooth transition using scrollHeight
+                menu.style.maxHeight = menu.scrollHeight + "px";
+                btn.setAttribute('aria-expanded', 'true');
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            }
         });
-      }
     });
 
-    // Expand automatically if current page is checklist.html, caixa.html, or gerar-report.html
-    if (path.endsWith('checklist.html') || path.endsWith('caixa.html') || path.endsWith('gerar-report.html')) {
-      const btn = document.getElementById('nav-rececao-btn');
-      const menu = document.getElementById('rececao-menu');
-      if (btn && menu) {
-        menu.classList.add('show');
-        btn.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-      }
-      
-      // Add active classes to submenus
-      if (path.endsWith('checklist.html')) {
-        const checklistLink = document.getElementById('nav-checklist');
-        if (checklistLink) checklistLink.classList.add('active');
-      }
-      if (path.endsWith('caixa.html')) {
-        const caixaLink = document.getElementById('nav-caixa');
-        if (caixaLink) caixaLink.classList.add('active');
-      }
-      if (path.endsWith('gerar-report.html')) {
-        const gerarLink = document.getElementById('nav-gerar-report');
-        if (gerarLink) gerarLink.classList.add('active');
-      }
-    }
-
-    if (path.endsWith('gestao-conteudo.html')) {
-      const btn = document.getElementById('nav-gestao-btn');
-      const menu = document.getElementById('gestao-menu');
-      if (btn && menu) {
-        menu.classList.add('show');
-        btn.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-      }
-      const gestaoLink = document.getElementById('nav-gestao-conteudo');
-      if (gestaoLink) gestaoLink.classList.add('active');
-    }
-
-    if (path.endsWith('relatorios.html')) {
-      const btn = document.getElementById('nav-arquivo-btn');
-      const menu = document.getElementById('arquivo-menu');
-      if (btn && menu) {
-        menu.classList.add('show');
-        btn.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-      }
-      const reportsLink = document.getElementById('nav-reports');
-      if (reportsLink) reportsLink.classList.add('active');
-    }
+    // 2. HIGHLIGHT ACTIVE CURRENT PAGE IN SIDEBAR
+    const currentPath = window.location.pathname.split("/").pop() || "index.html";
+    const navLinks = document.querySelectorAll('.dashboard-sidebar a');
     
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      dropdownBtns.forEach(btn => {
-        const menu = btn.nextElementSibling;
-        if (menu && menu.classList.contains('sidebar-dropdown-menu')) {
-          if (!btn.contains(e.target) && !menu.contains(e.target)) {
-            // Keep specific dropdowns open on their respective pages
-            if (path.endsWith('checklist.html') || path.endsWith('caixa.html') || path.endsWith('gerar-report.html')) {
-              if (btn.id === 'nav-rececao-btn') return;
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+            // If the active link is inside a dropdown, open that dropdown automatically
+            const parentMenu = link.closest('.sidebar-dropdown-menu');
+            if (parentMenu) {
+                const container = parentMenu.closest('.sidebar-dropdown-container');
+                const btn = container.querySelector('.sidebar-dropdown-btn');
+                const arrow = btn.querySelector('.dropdown-arrow');
+                container.classList.add('active-dropdown');
+                parentMenu.style.maxHeight = parentMenu.scrollHeight + "px";
+                btn.setAttribute('aria-expanded', 'true');
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
             }
-            if (path.endsWith('relatorios.html')) {
-              if (btn.id === 'nav-arquivo-btn') return;
-            }
-            menu.classList.remove('show');
-            btn.classList.remove('open');
-            btn.setAttribute('aria-expanded', 'false');
-          }
+        } else {
+            link.classList.remove('active');
         }
-      });
+    });
+
+    // 3. LISTEN FOR LANGUAGE CHANGES TO RECALCULATE HEIGHTS DYNAMICALLY
+    document.addEventListener('languageChanged', () => {
+      const activeContainer = document.querySelector('.sidebar-dropdown-container.active-dropdown');
+      if (activeContainer) {
+        const menu = activeContainer.querySelector('.sidebar-dropdown-menu');
+        if (menu) {
+          menu.style.maxHeight = menu.scrollHeight + "px";
+        }
+      }
     });
   }
 };
