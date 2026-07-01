@@ -1,6 +1,7 @@
 import { checkAuthStatus, logoutUser, checkRole, auth } from './auth.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
 import { translatePage } from './lang.js';
+import './automation.js';
 
 // Weather Service
 export const WeatherService = {
