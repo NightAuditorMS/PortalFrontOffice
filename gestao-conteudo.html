@@ -83,37 +83,48 @@
     </aside>
 
     <main class="dashboard-main">
-      <section class="card">
-        <h2 data-i18n="cms_title">Gestão de Conteúdo</h2>
-        <div class="section-note" data-i18n="cms_subtitle">Crie e publique novos conteúdos, alertas ou tarefas no portal.</div>
-        
-        <div id="cms-alert-box" class="cms-alert"></div>
+      <div class="notification-bar">
+        <h3 class="notification-bar-title" data-i18n="nav_gestao_conteudo">Gestão de Conteúdo (CMS)</h3>
+      </div>
 
-        <div class="cms-select-group">
-          <label for="cms-publish-select" data-i18n="lbl_publish_type">O que deseja publicar?</label>
-          <select id="cms-publish-select" class="cms-select">
-            <option value="" disabled selected data-i18n="select_placeholder">Selecione uma categoria...</option>
-            <option value="noticias">Notícias</option>
-            <option value="eventos">Eventos</option>
-            <option value="grupos">Grupos</option>
-            <option value="vip">VIP Alerts</option>
-            <option value="transferes">Transferes</option>
-            <option value="wakeup">Wake-Up Calls</option>
-            <option value="taxis">Táxis</option>
-            <option value="breakfast">Pedidos de Breakfast Boxes</option>
-          </select>
-        </div>
+      <section class="cms-section">
+        <div class="card" style="max-width: 800px; margin: 0 auto; background-color: #1e1e1e; border: 1px solid #333; padding: 25px; border-radius: 12px;">
+          <h2 style="color: #D4AF37; border-bottom: 1px solid #333; padding-bottom: 10px;">Nova Publicação</h2>
+          
+          <form id="form-cms" class="cms-form" style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
+            
+            <div class="form-group">
+              <label for="titulo" style="color: #b0b0b0; font-weight: bold;">Título da Publicação *</label>
+              <input type="text" id="titulo" required style="width: 100%; padding: 12px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px;">
+            </div>
 
-        <div id="cms-form-container">
-          <!-- Dynamic forms will be injected here by Javascript -->
-          <div class="muted" style="text-align: center; padding: 40px 0; border: 1px dashed var(--border); border-radius: 8px;">
-            Selecione uma categoria acima para carregar o respetivo formulário de publicação.
-          </div>
+            <div class="form-group">
+              <label for="categoria" style="color: #b0b0b0; font-weight: bold;">Categoria *</label>
+              <select id="categoria" required style="width: 100%; padding: 12px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px;">
+                <option value="noticias">Notícia (Geral)</option>
+                <option value="eventos">Evento / Briefing</option>
+                <option value="vip">Alerta VIP</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="conteudo" style="color: #b0b0b0; font-weight: bold;">Conteúdo da Mensagem *</label>
+              <textarea id="conteudo" rows="6" required style="width: 100%; padding: 12px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px; resize: vertical;"></textarea>
+            </div>
+
+            <button type="submit" id="btn-publicar" style="background-color: #D4AF37; color: #000; border: none; padding: 15px; font-weight: bold; text-transform: uppercase; border-radius: 6px; cursor: pointer; transition: 0.3s; margin-top: 10px;">
+              Publicar no Portal
+            </button>
+
+            <div id="mensagem-sucesso" style="display: none; background-color: #1e4620; color: #4ade80; padding: 15px; border-radius: 6px; text-align: center; font-weight: bold;">
+              Publicação enviada com sucesso!
+            </div>
+          </form>
         </div>
       </section>
     </main>
   </div>
 
-  <script type="module" src="js/gestao-conteudo.js"></script>
+  <script type="module" src="js/cms.js"></script>
 </body>
 </html>
