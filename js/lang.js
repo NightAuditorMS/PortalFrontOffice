@@ -159,7 +159,7 @@ export const translations = {
     // Missing Keys
     "checklist_subtitle": "Selecione o turno correspondente para carregar as tarefas obrigatórias.",
     "legend_warn": "* Se não assinalar os itens obrigatórios, a linha ficará vermelha ao submeter.",
-    "btn_export_pdf": "Exportar Relatório PDF",
+
     "warn_fill_start": "Por favor, seleciona o turno, preenche o nome do rececionista e a data.",
     "confirm_reset_checklist": "Deseja anular o progresso da checklist e voltar ao início? (A contagem de caixa será mantida)",
     "warn_proto_required": "O protocolo MySana é obrigatório.",
@@ -397,7 +397,7 @@ export const translations = {
     // Missing Keys
     "checklist_subtitle": "Select the corresponding shift to load mandatory tasks.",
     "legend_warn": "* If you do not check mandatory items, the line will turn red upon submission.",
-    "btn_export_pdf": "Export PDF Report",
+
     "warn_fill_start": "Please select the shift, fill in the receptionist name and the date.",
     "confirm_reset_checklist": "Do you want to cancel the checklist progress and return to the start? (Cash count will be preserved)",
     "warn_proto_required": "MySana Protocol is required.",

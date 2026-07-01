@@ -230,13 +230,7 @@ async function renderChecklist(turno, isRestore = false) {
   const dateVal = $('#auditorData').value;
   $('#labelInfoMeta').textContent = `${shiftText} | ${auditorName} | ${dateVal}`;
 
-  // If Night Audit, show MySana input if exist
-  if (turno === 'noite') {
-    // Show PDF export helper button once active
-    $('#btnExportarPDF').style.display = 'block';
-  } else {
-    $('#btnExportarPDF').style.display = 'none';
-  }
+
 
   if (!isRestore) {
     saveCurrentProgress();
@@ -354,9 +348,6 @@ $('#btnSubmeter').addEventListener('click', async () => {
   }
 });
 
-$('#btnExportarPDF').addEventListener('click', async () => {
-  await gerarPDF();
-});
 
 // PDF and SharePoint Automate submit logic
 async function submitShiftProgress() {
