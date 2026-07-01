@@ -1674,8 +1674,10 @@ li.optional-item {
 }
 
 .dropdown-arrow {
-  font-size: 9px;
-  transition: transform 0.2s ease;
+  display: inline-block;
+  transition: transform 0.3s ease;
+  font-size: 10px;
+  margin-left: auto;
   color: var(--muted);
 }
 
@@ -1684,12 +1686,12 @@ li.optional-item {
 }
 
 .sidebar-dropdown-menu {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: max-height 0.3s ease-out;
+  list-style: none;
+  padding-left: 15px;
+  margin: 0;
   background: rgba(0, 0, 0, 0.15);
 }
 
