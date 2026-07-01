@@ -50,6 +50,7 @@ async function initChecklist() {
       });
     }
     updateAllSectionToggles();
+    updateProgressBar();
   } else {
     // Default the date picker to today if empty
     if (!$('#auditorData').value) {
@@ -68,6 +69,20 @@ function getChecklistItems() { return $$('#checklist-container .check-item'); }
 function getAllCheckboxes(root = document) { return $$('input[type="checkbox"]:not(.section-toggle-all)', root); }
 function isOptional(cb) { return cb.dataset.optional === 'true' || cb.dataset.sunday === 'true'; }
 function clearWarnings() { getChecklistItems().forEach(li => li.classList.remove('unchecked-warning')); }
+
+function updateProgressBar() {
+  const cbs = getAllCheckboxes();
+  if (cbs.length === 0) return;
+  const checkedCount = cbs.filter(cb => cb.checked).length;
+  const percentage = Math.round((checkedCount / cbs.length) * 100);
+  const fill = document.getElementById('progress-bar-fill');
+  const text = document.getElementById('progress-text');
+  if (fill) fill.style.width = `${percentage}%`;
+  if (text) {
+    const lang = localStorage.getItem('portal-lang') || 'pt';
+    text.textContent = lang === 'en' ? `${percentage}% Complete` : `${percentage}% Completo`;
+  }
+}
 
 function getActiveDate() {
   let activeDate = new Date();
@@ -232,6 +247,7 @@ async function renderChecklist(turno, isRestore = false) {
 
 
 
+  updateProgressBar();
   if (!isRestore) {
     saveCurrentProgress();
   }
@@ -583,6 +599,7 @@ document.addEventListener('change', e => {
       clearWarnings();
       updateSectionToggle(sec);
       saveCurrentProgress();
+      updateProgressBar();
     }
     return;
   }
@@ -592,6 +609,18 @@ document.addEventListener('change', e => {
     if (sec) updateSectionToggle(sec);
     clearWarnings();
     saveCurrentProgress();
+    
+    // Trigger Gold Blink effect on checked
+    if (e.target.checked) {
+      const checkItem = e.target.closest('.check-item');
+      if (checkItem) {
+        checkItem.classList.remove('gold-blink');
+        void checkItem.offsetWidth; // Trigger reflow to restart animation
+        checkItem.classList.add('gold-blink');
+      }
+    }
+    
+    updateProgressBar();
   }
 });
 
@@ -619,6 +648,7 @@ document.addEventListener('languageChanged', (e) => {
         if (cbs[i]) cbs[i].checked = v;
       });
       updateAllSectionToggles();
+      updateProgressBar();
     });
   }
 });
